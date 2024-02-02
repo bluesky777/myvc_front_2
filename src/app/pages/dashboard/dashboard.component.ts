@@ -3,11 +3,12 @@ import { YearsService } from '../../core/services/years.service';
 import { GroupsService } from './../../core/services/groups.service';
 import { AuthService } from './services/auth.service';
 import { Component, OnInit } from '@angular/core';
+import { SidenavComponent } from '../../features/sidenav/sidenav.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CookieModule],
+  imports: [CookieModule, SidenavComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
@@ -28,7 +29,9 @@ export class DashboardComponent implements OnInit {
       next: (res) => {
         console.log(res);
       },
+      error: (err) => {
+        console.log(err);
+      },
     });
-    console.log(localStorage.getItem('xtoken'));
   }
 }

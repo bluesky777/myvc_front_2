@@ -10,9 +10,6 @@ export class GroupsService {
   constructor(private httpService: HttpClient) {}
 
   getGroups(): Observable<any> {
-    const token = localStorage.getItem('xtoken');
-    return this.httpService.get(`${BASE_URL}/grupos`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    return this.httpService.get(`${BASE_URL}/grupos`);
   }
 }
