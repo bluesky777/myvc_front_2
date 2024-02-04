@@ -6,10 +6,10 @@ import { BASE_URL } from '../CONSTANTS_URL';
 @Injectable({
   providedIn: 'root',
 })
-export class GroupsService {
+export class StudentService {
   constructor(private httpService: HttpClient) {}
 
-  getGroups(): Observable<any> {
-    return this.httpService.get(`${BASE_URL}/grupos`);
+  getStudents(group_id: string): Observable<any> {
+    return this.httpService.get(`${BASE_URL}/alumnos/${group_id}`);
   }
 }

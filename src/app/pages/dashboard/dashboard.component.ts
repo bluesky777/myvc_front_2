@@ -16,21 +16,13 @@ export class DashboardComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private yearsService: YearsService,
-    private groupsService: GroupsService
+    private groupsService: GroupsService,
   ) {}
 
   ngOnInit(): void {
     this.authService.getYears().subscribe({
       next: (res) => {
         console.log(res);
-      },
-    });
-    this.groupsService.getGroups().subscribe({
-      next: (res) => {
-        console.log(res);
-      },
-      error: (err) => {
-        console.log(err);
       },
     });
   }

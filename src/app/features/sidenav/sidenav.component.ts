@@ -7,6 +7,17 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 
+interface ItemNav {
+  title: string;
+  route: string;
+  items?: SubItem[];
+}
+
+interface SubItem {
+  label: string;
+  route: string;
+}
+
 @Component({
   selector: 'app-sidenav',
   standalone: true,
@@ -23,7 +34,7 @@ import { RouterModule } from '@angular/router';
   styleUrl: './sidenav.component.scss',
 })
 export class SidenavComponent {
-  navigationGroups = [
+  navigationGroups: ItemNav[] = [
     {
       title: 'Dashboard',
       route: '/',
@@ -32,21 +43,21 @@ export class SidenavComponent {
       title: 'PIAR',
       route: '/piar',
     },
-    {
-      title: 'Profile',
-      route: '/profile',
-      items: [
-        { label: 'Item 1.1', route: '/item1' },
-        { label: 'Item 1.2', route: '/item2' },
-      ],
-    },
-    {
-      title: 'Configuración',
-      route: '/configuracion',
-      items: [
-        { label: 'Config 1.1', route: '/config1' },
-        { label: 'Config 1.2', route: '/config2' },
-      ],
-    },
+    // {
+    //   title: 'Profile',
+    //   route: '/profile',
+    //   items: [
+    //     { label: 'Item 1.1', route: '/item1' },
+    //     { label: 'Item 1.2', route: '/item2' },
+    //   ],
+    // },
+    // {
+    //   title: 'Configuración',
+    //   route: '/configuracion',
+    //   items: [
+    //     { label: 'Config 1.1', route: '/config1' },
+    //     { label: 'Config 1.2', route: '/config2' },
+    //   ],
+    // },
   ];
 }

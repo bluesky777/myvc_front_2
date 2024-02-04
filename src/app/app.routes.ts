@@ -6,9 +6,11 @@ export const routes: Routes = [
   {
     path: '',
     component: DashboardComponent,
-  },
-  {
-    path: 'piar',
-    component: PiarComponent,
+    children: [
+      {
+        path: 'piar',
+        component: PiarComponent,
+      },
+    ],
   },
 ];

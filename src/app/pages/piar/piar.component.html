@@ -1,1 +1,15 @@
-<p>piar works!</p>
+<section>
+  <mat-button-toggle-group
+    [(value)]="selectedGroup"
+    appearance="legacy"
+    name="fontStyle"
+    aria-label="Font Style"
+  >
+    @for (group of groups; track group.id) {
+      <mat-button-toggle (change)="onGroupClick()" value="{{ group.id }}">{{
+        group.abrev
+      }}</mat-button-toggle>
+    }
+  </mat-button-toggle-group>
+  <app-table-piar></app-table-piar>
+</section>
