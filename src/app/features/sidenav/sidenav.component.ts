@@ -40,7 +40,7 @@ export class SidenavComponent {
       route: '/',
     },
     {
-      title: 'PIAR',
+      title: 'Ruta de inclusión',
       route: '/piar',
     },
     // {
@@ -49,14 +49,6 @@ export class SidenavComponent {
     //   items: [
     //     { label: 'Item 1.1', route: '/item1' },
     //     { label: 'Item 1.2', route: '/item2' },
-    //   ],
-    // },
-    // {
-    //   title: 'Configuración',
-    //   route: '/configuracion',
-    //   items: [
-    //     { label: 'Config 1.1', route: '/config1' },
-    //     { label: 'Config 1.2', route: '/config2' },
     //   ],
     // },
   ];

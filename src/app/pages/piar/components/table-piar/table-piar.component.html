@@ -16,7 +16,7 @@
       <button
         mat-icon-button
         aria-label="expand row"
-        (click)="onRowClick(element)"
+        (click)="onRowClick({ element, $event })"
       >
         @if (element.expanded) {
           <mat-icon>keyboard_arrow_up</mat-icon>
@@ -60,7 +60,7 @@
     *matRowDef="let element; columns: columnsToDisplayWithExpand"
     class="example-element-row"
     [class.example-expanded-row]="element.expanded"
-    (click)="onRowClick(element)"
+    (click)="onRowClick({ element, $event })"
   ></tr>
   <tr
     mat-row

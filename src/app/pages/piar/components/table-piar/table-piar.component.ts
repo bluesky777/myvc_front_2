@@ -33,8 +33,15 @@ export class TablePiarComponent {
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement?: PeriodicElement;
 
-  onRowClick(alumno: PeriodicElement) {
-    alumno.expanded = !alumno.expanded;
+  onRowClick({
+    element,
+    $event,
+  }: {
+    element: PeriodicElement;
+    $event: MouseEvent;
+  }) {
+    element.expanded = !element.expanded;
+    $event?.stopPropagation();
   }
 }
 

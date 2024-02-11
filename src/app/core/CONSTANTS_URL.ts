@@ -1,1 +1,7 @@
-export const BASE_URL = 'https://lalvirtual.edu.co/8myvc/public/api';
+const { hostname } = window.location;
+
+const isDev = hostname === 'localhost';
+
+export const BACK_URL = isDev
+  ? 'http://localhost/api'
+  : `https://${hostname}/8myvc/public/api`;
