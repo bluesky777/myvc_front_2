@@ -1,0 +1,13 @@
+<article>
+  {{ contextoFamiliarRecords | json }}
+
+  <div class="NgxEditor__Wrapper">
+    <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+    <ngx-editor
+      [editor]="editor"
+      [ngModel]="html"
+      [disabled]="false"
+      [placeholder]="'Escriba aquí el contexto familiar...'"
+    ></ngx-editor>
+  </div>
+</article>

@@ -1,25 +1,36 @@
-import { GroupsService } from './../../core/services/groups.service';
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { Group } from '../groups/models/groups';
+import { FamiliarContextService } from '../../core/services/familiar-context.service';
 import { StudentService } from '../../core/services/student.service';
-import { CommonModule } from '@angular/common';
+import { Group } from '../groups/models/groups';
+import { GroupsService } from './../../core/services/groups.service';
 import { TablePiarComponent } from './components/table-piar/table-piar.component';
+import { ContextoFamiliarComponent } from './contexto-familiar/contexto-familiar.component';
+import { FamiliarContext } from './contexto-familiar/models/familiar-context';
+import { ApiResponse } from '../../core/models/api-response';
 
 @Component({
   selector: 'app-piar',
   standalone: true,
-  imports: [MatButtonToggleModule, CommonModule, TablePiarComponent],
+  imports: [
+    CommonModule,
+    ContextoFamiliarComponent,
+    MatButtonToggleModule,
+    TablePiarComponent,
+  ],
   templateUrl: './piar.component.html',
   styleUrl: './piar.component.scss',
 })
 export class PiarComponent implements OnInit {
   groups?: Group[];
   selectedGroup?: string;
+  familiarContext?: FamiliarContext[];
   students?: any[];
 
   constructor(
     private groupsService: GroupsService,
+    private familiarContextService: FamiliarContextService,
     private studentService: StudentService,
   ) {}
 
@@ -40,14 +51,16 @@ export class PiarComponent implements OnInit {
 
   onGroupClick() {
     if (this.selectedGroup) {
-      this.studentService.getStudents(this.selectedGroup).subscribe({
-        next: (res) => {
-          this.students = res;
-        },
-        error: (err) => {
-          console.log(err);
-        },
-      });
+      this.familiarContextService
+        .getFamiliarContext(this.selectedGroup)
+        .subscribe({
+          next: (res: ApiResponse<FamiliarContext[]>) => {
+            this.familiarContext = res.data;
+          },
+          error: (err) => {
+            console.log(err);
+          },
+        });
     }
   }
 }
