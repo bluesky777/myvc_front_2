@@ -15,6 +15,11 @@
       }
     </mat-button-toggle-group>
   </div>
-  <app-contexto-familiar [records]="familiarContext" />
+  <app-contexto-familiar
+    [loading]="loadingContextoFamiliar"
+    [record]="familiarContext"
+    [savingContext]="savingFamiliarContext"
+    (saveContext)="onSaveFamiliarContext()"
+  />
   <app-table-piar></app-table-piar>
 </section>

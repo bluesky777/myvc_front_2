@@ -1,18 +1,39 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
 import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
 import { FamiliarContext } from './models/familiar-context';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-contexto-familiar',
   standalone: true,
-  imports: [CommonModule, NgxEditorModule, FormsModule],
+  imports: [
+    CommonModule,
+    NgxEditorModule,
+    FormsModule,
+    MatButton,
+    MatProgressSpinnerModule,
+  ],
   templateUrl: './contexto-familiar.component.html',
   styleUrl: './contexto-familiar.component.scss',
 })
 export class ContextoFamiliarComponent implements OnInit, OnDestroy {
-  @Input({ alias: 'records' }) contextoFamiliarRecords?: FamiliarContext[];
+  @Input({ alias: 'record' }) contextoFamiliarRecord?: FamiliarContext;
+
+  @Input() loading = true;
+
+  @Input() savingContext = false;
+
+  @Output() saveContext = new EventEmitter<FamiliarContext>();
 
   editor!: Editor;
 
@@ -32,5 +53,9 @@ export class ContextoFamiliarComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.editor.destroy();
+  }
+
+  save() {
+    this.saveContext.emit(this.contextoFamiliarRecord);
   }
 }

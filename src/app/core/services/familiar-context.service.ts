@@ -16,4 +16,11 @@ export class FamiliarContextService {
       `${BACK_URL}/piars-grupos/contexto-de-grupo/${group_id}`,
     );
   }
+
+  saveFamiliarContext(familiarContext: FamiliarContext) {
+    return this.httpService.put<ApiResponse<FamiliarContext>>(
+      `${BACK_URL}/piars-grupos/contexto-de-grupo`,
+      familiarContext,
+    );
+  }
 }
