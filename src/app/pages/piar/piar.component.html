@@ -19,7 +19,9 @@
     [loading]="loadingContextoFamiliar"
     [record]="familiarContext"
     [savingContext]="savingFamiliarContext"
-    (saveContext)="onSaveFamiliarContext()"
+    (saveContext)="onSaveFamiliarContext($event)"
   />
-  <app-table-piar></app-table-piar>
+  @if (alumnos.length > 0) {
+    <app-table-piar [alumnos]="alumnos"></app-table-piar>
+  }
 </section>

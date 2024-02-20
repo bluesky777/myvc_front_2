@@ -1,3 +1,5 @@
+import { Student } from '../../../groups/models/student';
+
 export interface FamiliarContext {
   id: number;
   grupo_id: number;
@@ -6,4 +8,9 @@ export interface FamiliarContext {
   caracterizacion_grupo?: string;
   updated_at: string;
   updated_by: number;
+}
+
+export interface FamiliarContextStudents {
+  familiarContext: FamiliarContext[];
+  alumnos: Student[];
 }

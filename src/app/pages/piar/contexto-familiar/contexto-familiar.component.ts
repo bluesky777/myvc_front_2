@@ -3,11 +3,19 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
+  SimpleChanges,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
 import { FamiliarContext } from './models/familiar-context';
@@ -22,11 +30,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     FormsModule,
     MatButton,
     MatProgressSpinnerModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './contexto-familiar.component.html',
   styleUrl: './contexto-familiar.component.scss',
 })
-export class ContextoFamiliarComponent implements OnInit, OnDestroy {
+export class ContextoFamiliarComponent implements OnInit, OnDestroy, OnChanges {
   @Input({ alias: 'record' }) contextoFamiliarRecord?: FamiliarContext;
 
   @Input() loading = true;
@@ -37,6 +46,13 @@ export class ContextoFamiliarComponent implements OnInit, OnDestroy {
 
   editor!: Editor;
 
+  form = new FormGroup({
+    editorContent: new FormControl({
+      value: this.contextoFamiliarRecord?.caracterizacion_grupo || '',
+      disabled: false,
+    }),
+  });
+
   toolbar: Toolbar = [
     ['bold', 'italic', 'underline'],
     ['ordered_list', 'bullet_list'],
@@ -44,8 +60,6 @@ export class ContextoFamiliarComponent implements OnInit, OnDestroy {
     ['text_color', 'background_color'],
     ['align_left', 'align_center', 'align_right', 'align_justify'],
   ];
-
-  html = '';
 
   ngOnInit(): void {
     this.editor = new Editor();
@@ -55,7 +69,23 @@ export class ContextoFamiliarComponent implements OnInit, OnDestroy {
     this.editor.destroy();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    const familiarContext = changes['contextoFamiliarRecord']?.currentValue;
+    if (familiarContext) {
+      this.form
+        .get('editorContent')
+        ?.setValue(familiarContext.caracterizacion_grupo);
+    }
+  }
+
+  get doc(): FormControl {
+    return this.form.get('editorContent') as FormControl;
+  }
+
   save() {
-    this.saveContext.emit(this.contextoFamiliarRecord);
+    this.saveContext.emit({
+      ...this.contextoFamiliarRecord,
+      caracterizacion_grupo: this.doc.value,
+    } as FamiliarContext);
   }
 }
