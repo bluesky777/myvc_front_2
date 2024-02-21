@@ -1,43 +1,47 @@
-tr.example-detail-row {
+tr.detail-row {
   height: 0;
 }
 
-tr.example-element-row:not(.example-expanded-row):hover {
+tr.element-row:not(.expanded-row):hover {
   background: whitesmoke;
 }
 
-tr.example-element-row:not(.example-expanded-row):active {
+tr.element-row:not(.expanded-row):active {
   background: #efefef;
 }
 
-.example-element-row td {
+.element-row td {
   border-bottom-width: 0;
 }
 
-.example-element-detail {
+.element-detail {
   overflow: hidden;
   display: flex;
-}
+  position: relative;
+  flex-direction: column;
 
-.example-element-diagram {
-  min-width: 80px;
-  border: 2px solid black;
-  padding: 8px;
-  font-weight: lighter;
-  margin: 8px 0;
-  height: 104px;
-}
+  .perfil-container,
+  .apoyo-ajustes-razonables,
+  .caracterizacion-estudiante,
+  .seguimientos,
+  .acta-acuerdo {
+    display: flex;
+  }
 
-.example-element-symbol {
-  font-weight: bold;
-  font-size: 40px;
-  line-height: normal;
-}
+  .apoyo-ajustes-razonables,
+  .caracterizacion-estudiante,
+  .seguimientos,
+  .acta-acuerdo {
+    :nth-child(2) {
+      flex: 2;
+    }
+  }
 
-.example-element-description {
-  padding: 16px;
-}
-
-.example-element-description-attribution {
-  opacity: 0.5;
+  .perfil-container {
+    img {
+      width: 100px;
+      border: 1px solid #ccc;
+      min-height: 100px;
+    }
+  }
 }

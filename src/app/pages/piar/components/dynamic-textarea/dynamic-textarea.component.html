@@ -1,0 +1,31 @@
+@if (editing) {
+  <form [formGroup]="form">
+    <article>
+      <div class="NgxEditor__Wrapper">
+        <ngx-editor-menu
+          [editor]="editor"
+          [toolbar]="toolbar"
+        ></ngx-editor-menu>
+        <ngx-editor
+          [editor]="editor"
+          [placeholder]="'Escriba aquí...'"
+          formControlName="editorContent"
+        ></ngx-editor>
+      </div>
+      <div class="button-container">
+        @if (saving) {
+          <mat-spinner [diameter]="30"></mat-spinner>
+        } @else {
+          <button mat-raised-button (click)="cancel()">Cancelar</button>
+          <button mat-raised-button color="primary" (click)="save()">
+            Guardar
+          </button>
+        }
+      </div>
+    </article>
+  </form>
+} @else {
+  <div class="text-container" (click)="startEdition()">
+    Presione aquí para editar.
+  </div>
+}

@@ -3,11 +3,9 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnChanges,
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges,
 } from '@angular/core';
 import {
   FormControl,
@@ -18,11 +16,11 @@ import {
 import { MatButton } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Editor, NgxEditorModule } from 'ngx-editor';
-import { toolbarDefaultOptions } from '../../../shared/config/toolbar-options';
-import { FamiliarContext } from './models/familiar-context';
+import { toolbarDefaultOptions } from '../../../../shared/config/toolbar-options';
+import { DynamicTextareaObject } from './models/dynamic-textarea-object';
 
 @Component({
-  selector: 'app-contexto-familiar',
+  selector: 'app-dynamic-textarea',
   standalone: true,
   imports: [
     CommonModule,
@@ -32,23 +30,23 @@ import { FamiliarContext } from './models/familiar-context';
     MatProgressSpinnerModule,
     ReactiveFormsModule,
   ],
-  templateUrl: './contexto-familiar.component.html',
-  styleUrl: './contexto-familiar.component.scss',
+  templateUrl: './dynamic-textarea.component.html',
+  styleUrl: './dynamic-textarea.component.scss',
 })
-export class ContextoFamiliarComponent implements OnInit, OnDestroy, OnChanges {
-  @Input({ alias: 'record' }) contextoFamiliarRecord?: FamiliarContext;
+export class DynamicTextareaComponent implements OnInit, OnDestroy {
+  @Input({ alias: 'record' }) dataText?: DynamicTextareaObject;
 
-  @Input() loading = true;
+  @Output() saveContext = new EventEmitter<DynamicTextareaObject>();
 
-  @Input() savingContext = false;
-
-  @Output() saveContext = new EventEmitter<FamiliarContext>();
+  @Input() saving = false;
 
   editor!: Editor;
 
+  editing = false;
+
   form = new FormGroup({
     editorContent: new FormControl({
-      value: this.contextoFamiliarRecord?.caracterizacion_grupo || '',
+      value: this.dataText || '',
       disabled: false,
     }),
   });
@@ -63,23 +61,22 @@ export class ContextoFamiliarComponent implements OnInit, OnDestroy, OnChanges {
     this.editor.destroy();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    const familiarContext = changes['contextoFamiliarRecord']?.currentValue;
-    if (familiarContext) {
-      this.form
-        .get('editorContent')
-        ?.setValue(familiarContext.caracterizacion_grupo);
-    }
-  }
-
   get doc(): FormControl {
     return this.form.get('editorContent') as FormControl;
   }
 
   save() {
     this.saveContext.emit({
-      ...this.contextoFamiliarRecord,
+      ...this.dataText,
       caracterizacion_grupo: this.doc.value,
-    } as FamiliarContext);
+    } as DynamicTextareaObject);
+  }
+
+  cancel() {
+    this.editing = false;
+  }
+
+  startEdition() {
+    this.editing = true;
   }
 }

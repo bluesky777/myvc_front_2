@@ -16,11 +16,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { Student } from '../../../groups/models/student';
+import { DynamicTextareaComponent } from '../dynamic-textarea/dynamic-textarea.component';
 
 @Component({
   selector: 'app-table-piar',
   standalone: true,
-  imports: [MatTableModule, MatButtonModule, MatIconModule],
+  imports: [
+    MatTableModule,
+    MatButtonModule,
+    MatIconModule,
+    DynamicTextareaComponent,
+  ],
   templateUrl: './table-piar.component.html',
   styleUrl: './table-piar.component.scss',
   animations: [
@@ -37,7 +43,7 @@ import { Student } from '../../../groups/models/student';
 export class TablePiarComponent implements OnInit, OnChanges {
   @Input() alumnos!: Student[];
 
-  columnsToDisplay = ['index', 'apellidos', 'nombres', 'sexo'];
+  columnsToDisplay = ['Nro', 'Apellidos', 'Nombres', 'Sexo'];
 
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
 
@@ -48,7 +54,7 @@ export class TablePiarComponent implements OnInit, OnChanges {
     if (alumnos) {
       this.alumnos = alumnos.map((alumno, index) => ({
         ...alumno,
-        index: index + 1,
+        nro: index + 1,
       }));
     }
   }
