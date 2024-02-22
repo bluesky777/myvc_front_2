@@ -1,3 +1,5 @@
+import { StudentPiar } from '../../piar/contexto-familiar/models/familiar-context';
+
 export interface Student {
   id: number;
   nombres: string;
@@ -8,4 +10,5 @@ export interface Student {
   foto_nombre: string;
   expanded?: boolean;
   index?: number;
+  studentPiar?: StudentPiar;
 }

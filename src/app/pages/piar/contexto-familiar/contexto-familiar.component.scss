@@ -1,3 +1,7 @@
+form {
+  margin-bottom: var(--contexto-familiar-margin-bottom, 20px);
+}
+
 article {
   display: flex;
   flex-direction: column;

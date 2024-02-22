@@ -12,6 +12,13 @@
       </td>
     </ng-container>
   }
+  <ng-container matColumnDef="ERE">
+    <th mat-header-cell *matHeaderCellDef aria-label="row actions">ERE</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.nee === 1 && "Si" }}
+    </td>
+  </ng-container>
+
   <ng-container matColumnDef="expand">
     <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
     <td mat-cell *matCellDef="let element">
@@ -45,7 +52,11 @@
         </div>
         <div class="caracterizacion-estudiante">
           <label>Caracterización del estudiante</label>
-          <app-dynamic-textarea></app-dynamic-textarea>
+          <app-dynamic-textarea
+            [dataText]="element.studentPiar.contexto_sociofamiliar"
+            [dataId]="element.studentPiar.id"
+            (saveText)="saveContextoSociofamiliar($event)"
+          ></app-dynamic-textarea>
         </div>
         <div class="apoyo-ajustes-razonables">
           <label>Apoyo y/o ajustes razonables</label>

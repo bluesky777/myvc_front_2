@@ -17,6 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { Student } from '../../../groups/models/student';
 import { DynamicTextareaComponent } from '../dynamic-textarea/dynamic-textarea.component';
+import { DynamicTextareaObject } from '../dynamic-textarea/models/dynamic-textarea-object';
 
 @Component({
   selector: 'app-table-piar',
@@ -43,19 +44,25 @@ import { DynamicTextareaComponent } from '../dynamic-textarea/dynamic-textarea.c
 export class TablePiarComponent implements OnInit, OnChanges {
   @Input() alumnos!: Student[];
 
+  filteredAlumnos: Student[] = [];
+
   columnsToDisplay = ['Nro', 'Apellidos', 'Nombres', 'Sexo'];
 
-  columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
+  columnsToDisplayWithExpand = [...this.columnsToDisplay, 'ERE', 'expand'];
+
+  filterPredicate = 'showOnlyNEE'; // 'showAll'
 
   ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
     const alumnos = changes['alumnos']?.currentValue as Student[];
     if (alumnos) {
-      this.alumnos = alumnos.map((alumno, index) => ({
-        ...alumno,
-        nro: index + 1,
-      }));
+      this.alumnos = alumnos
+        .filter((alum) => alum.studentPiar?.id)
+        .map((alumno, index) => ({
+          ...alumno,
+          nro: index + 1,
+        }));
     }
   }
 
@@ -68,5 +75,9 @@ export class TablePiarComponent implements OnInit, OnChanges {
   }): void {
     element.expanded = !element.expanded;
     $event?.stopPropagation();
+  }
+
+  saveContextoSociofamiliar($event: DynamicTextareaObject) {
+    console.log($event);
   }
 }

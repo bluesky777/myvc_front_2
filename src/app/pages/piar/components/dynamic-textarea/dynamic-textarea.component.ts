@@ -17,6 +17,7 @@ import { MatButton } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Editor, NgxEditorModule } from 'ngx-editor';
 import { toolbarDefaultOptions } from '../../../../shared/config/toolbar-options';
+import { StudentPiar } from '../../contexto-familiar/models/familiar-context';
 import { DynamicTextareaObject } from './models/dynamic-textarea-object';
 
 @Component({
@@ -34,9 +35,11 @@ import { DynamicTextareaObject } from './models/dynamic-textarea-object';
   styleUrl: './dynamic-textarea.component.scss',
 })
 export class DynamicTextareaComponent implements OnInit, OnDestroy {
-  @Input({ alias: 'record' }) dataText?: DynamicTextareaObject;
+  @Input() dataText?: string;
 
-  @Output() saveContext = new EventEmitter<DynamicTextareaObject>();
+  @Input() dataId?: number;
+
+  @Output() saveText = new EventEmitter<DynamicTextareaObject>();
 
   @Input() saving = false;
 
@@ -66,9 +69,9 @@ export class DynamicTextareaComponent implements OnInit, OnDestroy {
   }
 
   save() {
-    this.saveContext.emit({
-      ...this.dataText,
-      caracterizacion_grupo: this.doc.value,
+    this.saveText.emit({
+      id: this.dataId,
+      text: this.doc.value,
     } as DynamicTextareaObject);
   }
 

@@ -6,14 +6,15 @@ import { ApiResponse } from '../../core/models/api-response';
 import { FamiliarContextService } from '../../core/services/familiar-context.service';
 import { StudentService } from '../../core/services/student.service';
 import { Group } from '../groups/models/groups';
+import { Student } from '../groups/models/student';
 import { GroupsService } from './../../core/services/groups.service';
 import { TablePiarComponent } from './components/table-piar/table-piar.component';
 import { ContextoFamiliarComponent } from './contexto-familiar/contexto-familiar.component';
 import {
   FamiliarContext,
   FamiliarContextStudents,
+  StudentPiar,
 } from './contexto-familiar/models/familiar-context';
-import { Student } from '../groups/models/student';
 
 @Component({
   selector: 'app-piar',
@@ -30,12 +31,20 @@ import { Student } from '../groups/models/student';
 })
 export class PiarComponent implements OnInit {
   groups?: Group[];
+
   selectedGroup?: string;
+
   familiarContext?: FamiliarContext;
+
   students?: any[];
+
   loadingContextoFamiliar = false;
+
   savingFamiliarContext = false;
+
   alumnos: Student[] = [];
+
+  alumnosPiar: StudentPiar[] = [];
 
   constructor(
     private groupsService: GroupsService,
@@ -67,7 +76,16 @@ export class PiarComponent implements OnInit {
         .subscribe({
           next: (res: ApiResponse<FamiliarContextStudents>) => {
             this.familiarContext = res.data.familiarContext[0];
-            this.alumnos = res.data.alumnos;
+            this.alumnos = res.data.alumnos.map((alumno) => {
+              const alumno_piar = res.data.alumnos_piar.filter(
+                (alum) => alum.alumno_id === alumno.id,
+              );
+              return {
+                ...alumno,
+                studentPiar:
+                  alumno_piar.length > 0 ? alumno_piar[0] : undefined,
+              };
+            });
             this.loadingContextoFamiliar = false;
           },
           error: (err) => {
