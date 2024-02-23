@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ContextoFamiliarComponent } from './contexto-familiar.component';
+import { ContextoFamiliarComponent } from './contexto-grupo.component';
 
 describe('ContextoFamiliarComponent', () => {
   let component: ContextoFamiliarComponent;
@@ -8,10 +8,9 @@ describe('ContextoFamiliarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ContextoFamiliarComponent]
-    })
-    .compileComponents();
-    
+      imports: [ContextoFamiliarComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(ContextoFamiliarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

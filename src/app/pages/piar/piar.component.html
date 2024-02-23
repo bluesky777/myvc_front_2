@@ -15,11 +15,11 @@
       }
     </mat-button-toggle-group>
   </div>
-  <app-contexto-familiar
+  <app-contexto-grupo
     [loading]="loadingContextoFamiliar"
     [record]="familiarContext"
-    [savingContext]="savingFamiliarContext"
-    (saveContext)="onSaveFamiliarContext($event)"
+    [savingContext]="savingGroupContext"
+    (saveContext)="onSaveGroupContext($event)"
   />
   @if (alumnos.length > 0) {
     <app-table-piar [alumnos]="alumnos"></app-table-piar>

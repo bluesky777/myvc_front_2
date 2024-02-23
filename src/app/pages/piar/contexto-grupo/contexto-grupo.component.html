@@ -2,7 +2,7 @@
   <div class="spinner-container">
     <mat-spinner [diameter]="30"></mat-spinner>
   </div>
-} @else if (contextoFamiliarRecord) {
+} @else if (contextoGrupoRecord) {
   <form [formGroup]="form">
     <article>
       <div class="NgxEditor__Wrapper">
@@ -12,7 +12,7 @@
         ></ngx-editor-menu>
         <ngx-editor
           [editor]="editor"
-          [placeholder]="'Escriba aquí el contexto familiar...'"
+          [placeholder]="'Escriba aquí el contexto de grupo...'"
           formControlName="editorContent"
         ></ngx-editor>
       </div>

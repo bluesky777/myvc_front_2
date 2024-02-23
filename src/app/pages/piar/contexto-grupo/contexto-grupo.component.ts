@@ -17,12 +17,12 @@ import {
 } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Editor, NgxEditorModule } from 'ngx-editor';
+import { Editor, NgxEditorModule, toHTML } from 'ngx-editor';
 import { toolbarDefaultOptions } from '../../../shared/config/toolbar-options';
-import { FamiliarContext } from './models/familiar-context';
+import { GroupContext } from './models/familiar-grupo';
 
 @Component({
-  selector: 'app-contexto-familiar',
+  selector: 'app-contexto-grupo',
   standalone: true,
   imports: [
     CommonModule,
@@ -32,23 +32,23 @@ import { FamiliarContext } from './models/familiar-context';
     MatProgressSpinnerModule,
     ReactiveFormsModule,
   ],
-  templateUrl: './contexto-familiar.component.html',
-  styleUrl: './contexto-familiar.component.scss',
+  templateUrl: './contexto-grupo.component.html',
+  styleUrl: './contexto-grupo.component.scss',
 })
-export class ContextoFamiliarComponent implements OnInit, OnDestroy, OnChanges {
-  @Input({ alias: 'record' }) contextoFamiliarRecord?: FamiliarContext;
+export class ContextoGrupoComponent implements OnInit, OnDestroy, OnChanges {
+  @Input({ alias: 'record' }) contextoGrupoRecord?: GroupContext;
 
   @Input() loading = true;
 
   @Input() savingContext = false;
 
-  @Output() saveContext = new EventEmitter<FamiliarContext>();
+  @Output() saveContext = new EventEmitter<GroupContext>();
 
   editor!: Editor;
 
   form = new FormGroup({
     editorContent: new FormControl({
-      value: this.contextoFamiliarRecord?.caracterizacion_grupo || '',
+      value: this.contextoGrupoRecord?.caracterizacion_grupo || '',
       disabled: false,
     }),
   });
@@ -64,11 +64,11 @@ export class ContextoFamiliarComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const familiarContext = changes['contextoFamiliarRecord']?.currentValue;
-    if (familiarContext) {
+    const groupContext = changes['contextoGrupoRecord']?.currentValue;
+    if (groupContext) {
       this.form
         .get('editorContent')
-        ?.setValue(familiarContext.caracterizacion_grupo);
+        ?.setValue(groupContext.caracterizacion_grupo);
     }
   }
 
@@ -77,9 +77,13 @@ export class ContextoFamiliarComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   save() {
+    const html =
+      typeof this.doc.value === 'string'
+        ? this.doc.value
+        : toHTML(this.doc.value);
     this.saveContext.emit({
-      ...this.contextoFamiliarRecord,
-      caracterizacion_grupo: this.doc.value,
-    } as FamiliarContext);
+      ...this.contextoGrupoRecord,
+      caracterizacion_grupo: html,
+    } as GroupContext);
   }
 }

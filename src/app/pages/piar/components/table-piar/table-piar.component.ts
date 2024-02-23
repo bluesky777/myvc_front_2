@@ -18,7 +18,10 @@ import { MatTableModule } from '@angular/material/table';
 import { Student } from '../../../groups/models/student';
 import { DynamicTextareaComponent } from '../dynamic-textarea/dynamic-textarea.component';
 import { DynamicTextareaObject } from '../dynamic-textarea/models/dynamic-textarea-object';
+import { StudentContextService } from './services/student-context.service';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-table-piar',
   standalone: true,
@@ -52,6 +55,8 @@ export class TablePiarComponent implements OnInit, OnChanges {
 
   filterPredicate = 'showOnlyNEE'; // 'showAll'
 
+  constructor(private studentContextService: StudentContextService) {}
+
   ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -78,6 +83,11 @@ export class TablePiarComponent implements OnInit, OnChanges {
   }
 
   saveContextoSociofamiliar($event: DynamicTextareaObject) {
-    console.log($event);
+    this.studentContextService
+      .updateField($event)
+      .pipe(untilDestroyed(this))
+      .subscribe((res: any) => {
+        console.log(res);
+      });
   }
 }

@@ -1,4 +1,5 @@
 export interface DynamicTextareaObject {
-  text: string;
   id: number;
+  field: string;
+  text: string;
 }

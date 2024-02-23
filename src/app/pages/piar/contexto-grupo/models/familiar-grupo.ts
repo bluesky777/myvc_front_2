@@ -1,6 +1,6 @@
 import { Student } from '../../../groups/models/student';
 
-export interface FamiliarContext {
+export interface GroupContext {
   id: number;
   grupo_id: number;
   titular_id: number;
@@ -24,8 +24,8 @@ export interface StudentPiar {
   updated_by: number;
 }
 
-export interface FamiliarContextStudents {
-  familiarContext: FamiliarContext[];
+export interface GroupContextStudents {
+  familiarContext: GroupContext[];
   alumnos: Student[];
   alumnos_piar: StudentPiar[];
 }

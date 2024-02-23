@@ -9,19 +9,19 @@ import { Group } from '../groups/models/groups';
 import { Student } from '../groups/models/student';
 import { GroupsService } from './../../core/services/groups.service';
 import { TablePiarComponent } from './components/table-piar/table-piar.component';
-import { ContextoFamiliarComponent } from './contexto-familiar/contexto-familiar.component';
+import { ContextoGrupoComponent } from './contexto-grupo/contexto-grupo.component';
 import {
-  FamiliarContext,
-  FamiliarContextStudents,
+  GroupContext,
+  GroupContextStudents,
   StudentPiar,
-} from './contexto-familiar/models/familiar-context';
+} from './contexto-grupo/models/familiar-grupo';
 
 @Component({
   selector: 'app-piar',
   standalone: true,
   imports: [
     CommonModule,
-    ContextoFamiliarComponent,
+    ContextoGrupoComponent,
     MatButtonToggleModule,
     TablePiarComponent,
     ToastrModule,
@@ -34,13 +34,13 @@ export class PiarComponent implements OnInit {
 
   selectedGroup?: string;
 
-  familiarContext?: FamiliarContext;
+  familiarContext?: GroupContext;
 
   students?: any[];
 
   loadingContextoFamiliar = false;
 
-  savingFamiliarContext = false;
+  savingGroupContext = false;
 
   alumnos: Student[] = [];
 
@@ -74,7 +74,7 @@ export class PiarComponent implements OnInit {
       this.familiarContextService
         .getFamiliarContext(this.selectedGroup)
         .subscribe({
-          next: (res: ApiResponse<FamiliarContextStudents>) => {
+          next: (res: ApiResponse<GroupContextStudents>) => {
             this.familiarContext = res.data.familiarContext[0];
             this.alumnos = res.data.alumnos.map((alumno) => {
               const alumno_piar = res.data.alumnos_piar.filter(
@@ -95,16 +95,17 @@ export class PiarComponent implements OnInit {
     }
   }
 
-  onSaveFamiliarContext(familiarContext: FamiliarContext) {
-    this.savingFamiliarContext = true;
-    this.familiarContextService.saveFamiliarContext(familiarContext).subscribe({
-      next: (res: ApiResponse<FamiliarContext>) => {
+  onSaveGroupContext(familiarContext: GroupContext) {
+    this.savingGroupContext = true;
+    this.familiarContextService.saveGroupContext(familiarContext).subscribe({
+      next: (res: ApiResponse<GroupContext>) => {
+        this.savingGroupContext = false;
         this.toastr.success('Contexto familiar guardado');
       },
       error: (err) => {
+        this.savingGroupContext = false;
         this.toastr.error('Error guardando contexto familiar');
       },
-      complete: () => (this.savingFamiliarContext = false),
     });
   }
 }
