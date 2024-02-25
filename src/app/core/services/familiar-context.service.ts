@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import {
   GroupContext,
   GroupContextStudents,
-} from '../../pages/piar/contexto-grupo/models/familiar-grupo';
+} from '../../pages/piar/components/contexto-grupo/models/familiar-grupo';
 import { BACK_URL } from '../CONSTANTS_URL';
 import { ApiResponse } from '../models/api-response';
 

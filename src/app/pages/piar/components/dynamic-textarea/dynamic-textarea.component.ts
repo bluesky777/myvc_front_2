@@ -15,11 +15,15 @@ import {
 } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { DomSanitizer } from '@angular/platform-browser';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Editor, NgxEditorModule } from 'ngx-editor';
+import { ToastrService } from 'ngx-toastr';
 import { toolbarDefaultOptions } from '../../../../shared/config/toolbar-options';
-import { StudentPiar } from '../../contexto-grupo/models/familiar-grupo';
+import { StudentContextService } from '../table-piar/services/student-context.service';
 import { DynamicTextareaObject } from './models/dynamic-textarea-object';
 
+@UntilDestroy()
 @Component({
   selector: 'app-dynamic-textarea',
   standalone: true,
@@ -49,16 +53,23 @@ export class DynamicTextareaComponent implements OnInit, OnDestroy {
 
   editing = false;
 
-  form = new FormGroup({
-    editorContent: new FormControl({
-      value: this.dataText || '',
-      disabled: false,
-    }),
-  });
+  form!: FormGroup;
 
   toolbar = toolbarDefaultOptions;
 
+  constructor(
+    private studentContextService: StudentContextService,
+    private toastr: ToastrService,
+    private sanitizer: DomSanitizer,
+  ) {}
+
   ngOnInit(): void {
+    this.form = new FormGroup({
+      editorContent: new FormControl({
+        value: this.dataText || '',
+        disabled: false,
+      }),
+    });
     this.editor = new Editor();
   }
 
@@ -71,11 +82,23 @@ export class DynamicTextareaComponent implements OnInit, OnDestroy {
   }
 
   save() {
-    this.saveText.emit({
+    const data = {
       id: this.dataId,
       text: this.doc.value,
       field: this.dataField,
-    } as DynamicTextareaObject);
+    } as DynamicTextareaObject;
+
+    this.studentContextService
+      .updateField(data)
+      .pipe(untilDestroyed(this))
+      .subscribe({
+        next: (res: any) => {
+          this.toastr.success('Texto guardado.');
+        },
+        error: (res: any) => {
+          this.toastr.error('Error guardado texto.');
+        },
+      });
   }
 
   cancel() {
@@ -84,5 +107,9 @@ export class DynamicTextareaComponent implements OnInit, OnDestroy {
 
   startEdition() {
     this.editing = true;
+  }
+
+  getSanitizedText() {
+    return this.sanitizer.bypassSecurityTrustHtml(this.dataText || '');
   }
 }

@@ -18,7 +18,7 @@ import {
 import { MatButton } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Editor, NgxEditorModule, toHTML } from 'ngx-editor';
-import { toolbarDefaultOptions } from '../../../shared/config/toolbar-options';
+import { toolbarDefaultOptions } from '../../../../shared/config/toolbar-options';
 import { GroupContext } from './models/familiar-grupo';
 
 @Component({

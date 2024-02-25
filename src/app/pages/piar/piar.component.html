@@ -16,12 +16,12 @@
     </mat-button-toggle-group>
   </div>
   <app-contexto-grupo
-    [loading]="loadingContextoFamiliar"
+    [loading]="loadingGroupData"
     [record]="familiarContext"
     [savingContext]="savingGroupContext"
     (saveContext)="onSaveGroupContext($event)"
   />
-  @if (alumnos.length > 0) {
+  @if (alumnos.length > 0 && !loadingGroupData) {
     <app-table-piar [alumnos]="alumnos"></app-table-piar>
   }
 </section>

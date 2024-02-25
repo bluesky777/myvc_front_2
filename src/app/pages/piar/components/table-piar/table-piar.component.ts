@@ -20,6 +20,7 @@ import { DynamicTextareaComponent } from '../dynamic-textarea/dynamic-textarea.c
 import { DynamicTextareaObject } from '../dynamic-textarea/models/dynamic-textarea-object';
 import { StudentContextService } from './services/student-context.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { ToastrService } from 'ngx-toastr';
 
 @UntilDestroy()
 @Component({
@@ -55,7 +56,7 @@ export class TablePiarComponent implements OnInit, OnChanges {
 
   filterPredicate = 'showOnlyNEE'; // 'showAll'
 
-  constructor(private studentContextService: StudentContextService) {}
+  constructor(private toastr: ToastrService) {}
 
   ngOnInit(): void {}
 
@@ -80,14 +81,5 @@ export class TablePiarComponent implements OnInit, OnChanges {
   }): void {
     element.expanded = !element.expanded;
     $event?.stopPropagation();
-  }
-
-  saveContextoSociofamiliar($event: DynamicTextareaObject) {
-    this.studentContextService
-      .updateField($event)
-      .pipe(untilDestroyed(this))
-      .subscribe((res: any) => {
-        console.log(res);
-      });
   }
 }

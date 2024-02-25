@@ -1,4 +1,4 @@
-import { Student } from '../../../groups/models/student';
+import { Student } from '../../../../groups/models/student';
 
 export interface GroupContext {
   id: number;

@@ -11,9 +11,6 @@ export class StudentContextService {
   constructor(private http: HttpClient) {}
 
   updateField(dynamicObject: DynamicTextareaObject): Observable<any> {
-    return this.http.put(
-      `${BACK_URL}/piars-grupos/contexto-de-grupo`,
-      dynamicObject,
-    );
+    return this.http.put(`${BACK_URL}/piars-grupos/field`, dynamicObject);
   }
 }

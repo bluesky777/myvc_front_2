@@ -36,7 +36,6 @@
     </td>
   </ng-container>
 
-  <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
   <ng-container matColumnDef="expandedDetail">
     <td
       mat-cell
@@ -56,7 +55,6 @@
             [dataText]="element.studentPiar.contexto_sociofamiliar"
             [dataId]="element.studentPiar.id"
             dataField="contexto_sociofamiliar"
-            (saveText)="saveContextoSociofamiliar($event)"
           ></app-dynamic-textarea>
         </div>
         <div class="apoyo-ajustes-razonables">

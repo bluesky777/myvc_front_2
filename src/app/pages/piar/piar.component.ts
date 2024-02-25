@@ -9,12 +9,12 @@ import { Group } from '../groups/models/groups';
 import { Student } from '../groups/models/student';
 import { GroupsService } from './../../core/services/groups.service';
 import { TablePiarComponent } from './components/table-piar/table-piar.component';
-import { ContextoGrupoComponent } from './contexto-grupo/contexto-grupo.component';
+import { ContextoGrupoComponent } from './components/contexto-grupo/contexto-grupo.component';
 import {
   GroupContext,
   GroupContextStudents,
   StudentPiar,
-} from './contexto-grupo/models/familiar-grupo';
+} from './components/contexto-grupo/models/familiar-grupo';
 
 @Component({
   selector: 'app-piar',
@@ -38,7 +38,7 @@ export class PiarComponent implements OnInit {
 
   students?: any[];
 
-  loadingContextoFamiliar = false;
+  loadingGroupData = false;
 
   savingGroupContext = false;
 
@@ -70,7 +70,7 @@ export class PiarComponent implements OnInit {
 
   onGroupClick() {
     if (this.selectedGroup) {
-      this.loadingContextoFamiliar = true;
+      this.loadingGroupData = true;
       this.familiarContextService
         .getFamiliarContext(this.selectedGroup)
         .subscribe({
@@ -86,9 +86,10 @@ export class PiarComponent implements OnInit {
                   alumno_piar.length > 0 ? alumno_piar[0] : undefined,
               };
             });
-            this.loadingContextoFamiliar = false;
+            this.loadingGroupData = false;
           },
           error: (err) => {
+            this.loadingGroupData = false;
             console.log(err);
           },
         });

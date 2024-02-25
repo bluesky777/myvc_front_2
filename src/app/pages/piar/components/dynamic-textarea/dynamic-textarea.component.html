@@ -25,7 +25,18 @@
     </article>
   </form>
 } @else {
-  <div class="text-container" (click)="startEdition()">
-    Presione aquí para editar.
-  </div>
+  @if (dataText) {
+    <div class="text-container" (click)="startEdition()">
+      <div class="frontdrop"></div>
+      <div
+        [innerHTML]="getSanitizedText()"
+        tabindex="100"
+        (ng-click)="startEdition()"
+      ></div>
+    </div>
+  } @else {
+    <div class="text-container" (click)="startEdition()">
+      {{ "Presione aquí para editar." }}
+    </div>
+  }
 }

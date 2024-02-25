@@ -1,4 +1,4 @@
-import { StudentPiar } from '../../piar/contexto-grupo/models/familiar-grupo';
+import { StudentPiar } from '../../piar/components/contexto-grupo/models/familiar-grupo';
 
 export interface Student {
   id: number;
