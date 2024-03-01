@@ -23,15 +23,20 @@ tr.element-row:not(.expanded-row):active {
   .perfil-container,
   .apoyo-ajustes-razonables,
   .caracterizacion-estudiante,
-  .seguimientos,
-  .acta-acuerdo {
+  .acta-de-acuerdo {
     display: flex;
+    margin-bottom: 40px;
+    gap: 10px;
+
+    label {
+      width: 200px;
+      font-weight: 500;
+    }
   }
 
   .apoyo-ajustes-razonables,
   .caracterizacion-estudiante,
-  .seguimientos,
-  .acta-acuerdo {
+  .acta-de-acuerdo {
     :nth-child(2) {
       flex: 2;
     }
@@ -43,5 +48,13 @@ tr.element-row:not(.expanded-row):active {
       border: 1px solid #ccc;
       min-height: 100px;
     }
+  }
+}
+
+@media (max-width: 700px) {
+  .apoyo-ajustes-razonables,
+  .caracterizacion-estudiante,
+  .acta-de-acuerdo {
+    flex-direction: column;
   }
 }

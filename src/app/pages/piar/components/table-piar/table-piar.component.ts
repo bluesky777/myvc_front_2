@@ -21,6 +21,7 @@ import { DynamicTextareaObject } from '../dynamic-textarea/models/dynamic-textar
 import { StudentContextService } from './services/student-context.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { ToastrService } from 'ngx-toastr';
+import { FileUploadComponent } from '../file-upload/file-upload.component';
 
 @UntilDestroy()
 @Component({
@@ -31,6 +32,7 @@ import { ToastrService } from 'ngx-toastr';
     MatButtonModule,
     MatIconModule,
     DynamicTextareaComponent,
+    FileUploadComponent,
   ],
   templateUrl: './table-piar.component.html',
   styleUrl: './table-piar.component.scss',

@@ -1,0 +1,20 @@
+<div class="uploader-wrapper">
+  <mat-form-field appearance="fill">
+    <mat-label>Arrastra aquí un archivo</mat-label>
+    <ngx-mat-dropzone>
+      <input type="file" fileInput [formControl]="fileCtrl" />
+      @if (fileCtrl.value) {
+        <mat-chip-row (removed)="clear()">
+          {{ fileCtrl.value.name }}
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
+      }
+    </ngx-mat-dropzone>
+    <mat-icon matSuffix color="primary">cloud_upload</mat-icon>
+  </mat-form-field>
+  <button mat-raised-button (click)="uploadFile()" color="primary">
+    Guardar
+  </button>
+</div>
