@@ -5,7 +5,7 @@
   <span>My Virtual College</span>
 </mat-toolbar>
 <mat-drawer-container class="example-container" autosize>
-  <mat-drawer #drawer class="example-sidenav" mode="side" opened>
+  <mat-drawer #drawer class="example-sidenav" mode="side" [opened]="opened">
     <mat-nav-list>
       @for (group of navigationGroups; track $index) {
         @if (!group.items) {

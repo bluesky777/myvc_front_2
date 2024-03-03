@@ -34,6 +34,8 @@ interface SubItem {
   styleUrl: './sidenav.component.scss',
 })
 export class SidenavComponent {
+  opened = false;
+
   navigationGroups: ItemNav[] = [
     {
       title: 'Dashboard',

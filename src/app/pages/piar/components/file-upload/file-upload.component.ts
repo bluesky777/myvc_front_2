@@ -6,8 +6,13 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { MatButton } from '@angular/material/button';
-import { BACK_URL } from '../../../../core/CONSTANTS_URL';
+import {
+  MatButton,
+  MatButtonModule,
+  MatFabButton,
+  MatIconButton,
+} from '@angular/material/button';
+import { UPLOADS_URL } from '../../../../core/CONSTANTS_URL';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {
   DropzoneCdkModule,
@@ -16,10 +21,18 @@ import {
 } from '@ngx-dropzone/cdk';
 import { DropzoneMaterialModule } from '@ngx-dropzone/material';
 import { MatIconModule } from '@angular/material/icon';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import {
+  Form,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatChipsModule } from '@angular/material/chips';
 import { Observable, catchError, map, of } from 'rxjs';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { FileUploadService } from './services/file-upload.service';
+import { Validators } from 'ngx-editor';
 
 @Component({
   selector: 'app-file-upload',
@@ -28,7 +41,7 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
     CommonModule,
     DropzoneCdkModule,
     DropzoneMaterialModule,
-    MatButton,
+    MatButtonModule,
     MatChipsModule,
     MatFormFieldModule,
     MatIconModule,
@@ -40,6 +53,7 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
 })
 export class FileUploadComponent {
   @Input() alumnoId!: number;
+  @Input() documentName?: string;
 
   validators = [
     FileInputValidators.accept('application/pdf'),
@@ -48,78 +62,79 @@ export class FileUploadComponent {
     ),
   ];
 
-  fileCtrl = new FormControl<File | null>(null, this.validators);
+  myForm: FormGroup;
 
-  uploadApiUrl = `${BACK_URL}/piars-alumnos/document`;
+  // fileCtrl = new FormControl<File | null | File[]>(null, [
+  //   Validators.required,
+  //   this.fileTypeValidator(['pdf', 'doc', 'docx']),
+  // ]);
+
+  UPLOADS_URL = UPLOADS_URL;
+
+  documentNameAlone = '';
 
   constructor(
     private http: HttpClient,
     private toastr: ToastrService,
-  ) {}
+    private fileUploadService: FileUploadService,
+    private fb: FormBuilder,
+  ) {
+    this.myForm = this.fb.group({
+      fileCtrl: [
+        null,
+        [Validators.required, this.fileTypeValidator(['pdf', 'doc', 'docx'])],
+      ],
+    });
+  }
 
   ngOnInit(): void {
-    this.fileCtrl.valueChanges.subscribe({
-      next: (res) => console.log(res),
-    });
+    this.documentNameAlone = this.documentName?.split('/')[1] || '';
   }
 
   clear() {
-    this.fileCtrl.setValue(null);
+    this.fileControl.setValue(null);
   }
 
   uploadFile() {
+    if (!this.fileControl.value) return;
+
+    const file = this.fileControl.value as File;
+
     const MAX_SIZE = 5000000; // 5MB
-    if (this.fileCtrl.value && this.fileCtrl.value.size > MAX_SIZE) {
+    if (file && file.size > MAX_SIZE) {
       this.toastr.success('Tamaño invalido');
     }
 
-    const form = new FormData();
-    form.append('file', this.fileCtrl.value as File);
-    form.append('alumno_id', this.alumnoId.toString());
-
-    const req = new HttpRequest('POST', this.uploadApiUrl, form, {
-      reportProgress: true,
+    this.fileUploadService.updateFile(file, this.alumnoId).subscribe({
+      next: (res) => {
+        console.log('Subs', res);
+      },
     });
-
-    this.http
-      .request(req)
-      .pipe(
-        map((res: HttpEvent<any>) => {
-          if (res.type === HttpEventType.Response) {
-            const responseFromBackend = res.body;
-            return {
-              body: responseFromBackend,
-              status: 'UploadStatus.UPLOADED',
-            };
-          } else if (res.type === HttpEventType.UploadProgress && res.total) {
-            /** Compute and show the % done: */
-            const uploadProgress = +Math.round((100 * res.loaded) / res.total);
-            return {
-              status: 'UploadStatus.IN_PROGRESS',
-              progress: uploadProgress,
-            };
-          } else {
-            return undefined;
-          }
-        }),
-        catchError((er) => {
-          console.log(er);
-          return of({ status: 'UploadStatus.ERROR', body: er });
-        }),
-      )
-      .subscribe({
-        next: () => {
-          console.log('Subs');
-        },
-      });
   }
 
-  public removeFile(fileItem: any): Observable<any> {
-    const id = 50;
-    const responseFromBackend = fileItem.uploadResponse;
-    console.log(fileItem);
-    const removeApi =
-      'https://run.mocky.io/v3/dedf88ec-7ce8-429a-829b-bd2fc55352bc';
-    return this.http.post(removeApi, { id });
+  public removeFile(): void {
+    this.fileControl.setValue(null);
+  }
+
+  fileTypeValidator(allowedTypes: string[]) {
+    return (control: FormControl) => {
+      const file = control.value;
+      if (file) {
+        const fileName = file.name.toLowerCase();
+        const extension = fileName.split('.').pop();
+        if (!allowedTypes.includes(extension)) {
+          return { invalidFileType: true };
+        }
+      }
+      return null;
+    };
+  }
+
+  get fileControl(): FormControl {
+    return this.myForm.get('fileCtrl') as FormControl;
+  }
+
+  get file(): File {
+    return (this.myForm.get('fileCtrl') as FormControl).value as File;
   }
 }
