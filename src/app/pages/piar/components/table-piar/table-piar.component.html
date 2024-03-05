@@ -53,7 +53,7 @@
             <app-file-upload
               [alumnoId]="element.studentPiar.alumno_id"
               [documentName]="element.studentPiar.documento1"
-              [titular_id]="titular_id"
+              [titular_id]="selectedGroup.titular_id"
             ></app-file-upload>
           </div>
         </div>
@@ -68,7 +68,10 @@
           ></app-dynamic-textarea>
         </div>
 
-        <app-apoyo-ajustes [alumno]="element"></app-apoyo-ajustes>
+        <app-apoyo-ajustes
+          [alumno]="element"
+          [selectedGroup]="selectedGroup"
+        ></app-apoyo-ajustes>
 
         <div class="acta-de-acuerdo">
           <label>Acta de acuerdo</label>

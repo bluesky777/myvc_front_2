@@ -1,31 +1,58 @@
 <div class="asignaturas-list">
   @if (loading) {
-    <div class="spinner-container">
+    <div class="asignaturas-header">
       <mat-spinner [diameter]="30"></mat-spinner>
     </div>
   } @else if (alumno.studentPiar) {
-    <mat-button-toggle-group
-      [(value)]="selectedAsignatura"
-      name="groupButtons"
-      aria-label="Grupo"
-    >
-      @for (asignatura of asignaturas; track asignatura.asignatura_id) {
-        <mat-button-toggle
-          (change)="onAsignaturaClick()"
-          [value]="asignatura"
-          style="line-height: 20px"
-          >{{ asignatura.alias_materia }}
-          {{ asignatura.abrev_grupo }}</mat-button-toggle
-        >
-      }
-    </mat-button-toggle-group>
-    <div class="apoyo-razonables">
-      <label>Apoyo y/o ajustes razonables</label>
-      <app-dynamic-textarea
-        [dataId]="alumno.studentPiar.id"
-        [hasEditingPermissions]="true"
-        dataField="apoyo_ajustes_razonables"
-      ></app-dynamic-textarea>
+    @if (!asignaturas?.length) {
+      <div class="center">
+        Usted no tiene asignada ninguna materia en este grupo ({{
+          selectedGroup.nombre
+        }})
+      </div>
+    }
+
+    <div class="asignaturas-header">
+      <mat-button-toggle-group
+        [(value)]="selectedAsignatura"
+        name="groupButtons"
+        aria-label="Grupo"
+      >
+        @for (asignatura of asignaturas; track asignatura.asignatura_id) {
+          <mat-button-toggle
+            (change)="onAsignaturaClick()"
+            [value]="asignatura"
+            style="line-height: 20px"
+            >{{ asignatura.alias_materia }}
+            {{ asignatura.abrev_grupo }}</mat-button-toggle
+          >
+        }
+      </mat-button-toggle-group>
     </div>
+
+    @if (selectedAsignatura) {
+      <div class="field-row">
+        <label>Apoyo y/o ajustes razonables</label>
+        <app-dynamic-textarea
+          [dataText]="selectedAsignatura.piar_asignatura.apoyo_razonable"
+          [dataId]="selectedAsignatura.piar_asignatura.id"
+          [hasEditingPermissions]="true"
+          (saveText)="
+            selectedAsignatura.piar_asignatura.apoyo_razonable = $event
+          "
+          dataField="apoyo_razonable"
+        ></app-dynamic-textarea>
+      </div>
+      <div class="field-row">
+        <label>Seguimientos</label>
+        <app-dynamic-textarea
+          [dataText]="selectedAsignatura.piar_asignatura.seguimientos"
+          [dataId]="selectedAsignatura.piar_asignatura.id"
+          [hasEditingPermissions]="true"
+          (saveText)="selectedAsignatura.piar_asignatura.seguimientos = $event"
+          dataField="seguimientos"
+        ></app-dynamic-textarea>
+      </div>
+    }
   }
 </div>

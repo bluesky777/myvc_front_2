@@ -23,6 +23,7 @@ import { ProfileService } from '../../../../core/services/profile.service';
 import { toolbarDefaultOptions } from '../../../../shared/config/toolbar-options';
 import { StudentContextService } from '../table-piar/services/student-context.service';
 import { DynamicTextareaObject } from './models/dynamic-textarea-object';
+import { AsignaturaContextService } from './services/asignatura-context.service';
 
 @UntilDestroy()
 @Component({
@@ -62,6 +63,7 @@ export class DynamicTextareaComponent implements OnInit, OnDestroy {
 
   constructor(
     private studentContextService: StudentContextService,
+    private asignaturaContextService: AsignaturaContextService,
     private toastr: ToastrService,
     private sanitizer: DomSanitizer,
     private profileService: ProfileService,
@@ -92,18 +94,35 @@ export class DynamicTextareaComponent implements OnInit, OnDestroy {
       field: this.dataField,
     } as DynamicTextareaObject;
 
-    this.studentContextService
-      .updateField(data)
-      .pipe(untilDestroyed(this))
-      .subscribe({
-        next: (res: any) => {
-          this.toastr.success('Texto guardado.');
-          this.saveText.emit(this.doc.value);
-        },
-        error: (res: any) => {
-          this.toastr.error('Error guardado texto.');
-        },
-      });
+    if (
+      ['apoyo_razonable', 'seguimientos'].includes(this.dataField as string)
+    ) {
+      this.asignaturaContextService
+        .updateField(data)
+        .pipe(untilDestroyed(this))
+        .subscribe({
+          next: (res: any) => {
+            this.toastr.success('Texto guardado.');
+            this.saveText.emit(this.doc.value);
+          },
+          error: (res: any) => {
+            this.toastr.error('Error guardado texto.');
+          },
+        });
+    } else {
+      this.studentContextService
+        .updateField(data)
+        .pipe(untilDestroyed(this))
+        .subscribe({
+          next: (res: any) => {
+            this.toastr.success('Texto guardado.');
+            this.saveText.emit(this.doc.value);
+          },
+          error: (res: any) => {
+            this.toastr.error('Error guardado texto.');
+          },
+        });
+    }
   }
 
   cancel() {

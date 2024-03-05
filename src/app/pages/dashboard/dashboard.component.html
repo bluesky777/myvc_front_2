@@ -10,12 +10,14 @@
   </mat-drawer>
 
   <mat-drawer-content>
-    <ng-container *ngIf="!authorizing && !user">
-      Actualmente no tienes acceso.
-    </ng-container>
-    <ng-container *ngIf="!authorizing && user">
+    @if (!authorizing && !authorized) {
+      Actualmente usted no tiene acceso.
+    }
+    @if (!authorizing && user) {
       <router-outlet></router-outlet>
-    </ng-container>
-    <ng-container *ngIf="authorizing"> Autenticando... </ng-container>
+    }
+    @if (authorizing) {
+      Autenticando...
+    }
   </mat-drawer-content>
 </mat-drawer-container>

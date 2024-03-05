@@ -40,6 +40,8 @@ export class DashboardComponent implements OnInit {
 
   authorizing = false;
 
+  authorized = false;
+
   constructor(
     private authService: AuthService,
     private yearsService: YearsService,
@@ -55,8 +57,13 @@ export class DashboardComponent implements OnInit {
       },
     });
     this.profileService.getData().subscribe({
-      next: (user: Profile) => {
-        this.user = user;
+      next: (user: unknown) => {
+        if ((user as Array<any>).length === 0) {
+          this.authorized = false;
+        } else {
+          this.user = user as Profile;
+          this.authorized = true;
+        }
         this.authorizing = false;
       },
     });

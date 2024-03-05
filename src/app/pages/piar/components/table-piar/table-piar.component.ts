@@ -25,6 +25,7 @@ import { DynamicTextareaComponent } from '../dynamic-textarea/dynamic-textarea.c
 import { FileUploadComponent } from '../file-upload/file-upload.component';
 import { PerfilContainerComponent } from '../perfil-container/perfil-container.component';
 import { AsignaturasService } from './../../../../features/asignaturas/asignaturas.services';
+import { Group } from '../../../groups/models/groups';
 
 @UntilDestroy()
 @Component({
@@ -56,7 +57,7 @@ import { AsignaturasService } from './../../../../features/asignaturas/asignatur
 export class TablePiarComponent implements OnInit, OnChanges {
   @Input() alumnos!: Student[];
 
-  @Input() titular_id!: number;
+  @Input() selectedGroup!: Group;
 
   filteredAlumnos: Student[] = [];
 

@@ -4,8 +4,9 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSpinner } from '@angular/material/progress-spinner';
 import { Asignatura } from '../../../../features/asignaturas/asignatura';
 import { AsignaturasService } from '../../../../features/asignaturas/asignaturas.services';
-import { DynamicTextareaComponent } from '../dynamic-textarea/dynamic-textarea.component';
+import { Group } from '../../../groups/models/groups';
 import { Student } from '../../../groups/models/student';
+import { DynamicTextareaComponent } from '../dynamic-textarea/dynamic-textarea.component';
 
 @Component({
   selector: 'app-apoyo-ajustes',
@@ -22,6 +23,8 @@ import { Student } from '../../../groups/models/student';
 export class ApoyoAjustesComponent {
   @Input() alumno!: Student;
 
+  @Input() selectedGroup!: Group;
+
   asignaturas?: Asignatura[];
 
   selectedAsignatura?: Asignatura;
@@ -32,8 +35,10 @@ export class ApoyoAjustesComponent {
 
   ngOnInit(): void {
     this.asignaturasService.getAsignaturas(this.alumno.id).subscribe({
-      next: (res) => {
-        this.asignaturas = res.asignaturas;
+      next: (asignaturas: Asignatura[]) => {
+        this.asignaturas = asignaturas.filter((asignatura) => {
+          return asignatura.grupo_id === this.selectedGroup.id;
+        });
         this.loading = false;
       },
     });

@@ -32,7 +32,7 @@
   @if (alumnos.length > 0 && !loadingGroupData && selectedGroup) {
     <app-table-piar
       [alumnos]="alumnos"
-      [titular_id]="selectedGroup.titular_id"
+      [selectedGroup]="selectedGroup"
     ></app-table-piar>
   }
 </section>
