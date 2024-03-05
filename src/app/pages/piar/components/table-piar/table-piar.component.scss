@@ -14,6 +14,15 @@ tr.element-row:not(.expanded-row):active {
   border-bottom-width: 0;
 }
 
+.expanded-row td {
+  font-weight: 500;
+}
+
+.expanded-row + .detail-row td {
+  padding-top: 20px;
+  box-shadow: 0 0 4px #ccc inset;
+}
+
 .element-detail {
   overflow: hidden;
   display: flex;

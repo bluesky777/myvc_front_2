@@ -1,0 +1,14 @@
+<div class="perfil-container">
+  <img [src]="getImage(alumno.foto_nombre, alumno.sexo)" alt="Foto de perfil" />
+  <div>
+    <div>Celular: {{ alumno.celular }} - {{ alumno.telefono }}</div>
+    <div>Dirección: {{ alumno.direccion }}</div>
+  </div>
+  <div class="info">
+    <div *ngFor="let acudiente of alumno.studentPiar?.acudientes">
+      <div class="bold">{{ acudiente.parentesco }}</div>
+      <div>{{ acudiente.nombres }} {{ acudiente.apellidos }}</div>
+      <div>{{ acudiente.celular }} {{ acudiente.telefono }}</div>
+    </div>
+  </div>
+</div>

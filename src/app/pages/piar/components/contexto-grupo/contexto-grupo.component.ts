@@ -1,3 +1,4 @@
+import { ProfileService } from './../../../../core/services/profile.service';
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -42,6 +43,8 @@ export class ContextoGrupoComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() savingContext = false;
 
+  @Input() titular_id!: number;
+
   @Output() saveContext = new EventEmitter<GroupContext>();
 
   editor!: Editor;
@@ -55,8 +58,11 @@ export class ContextoGrupoComponent implements OnInit, OnDestroy, OnChanges {
 
   toolbar = toolbarDefaultOptions;
 
+  constructor(private profileService: ProfileService) {}
+
   ngOnInit(): void {
     this.editor = new Editor();
+    const user = this.profileService.user;
   }
 
   ngOnDestroy(): void {
@@ -74,6 +80,13 @@ export class ContextoGrupoComponent implements OnInit, OnDestroy, OnChanges {
 
   get doc(): FormControl {
     return this.form.get('editorContent') as FormControl;
+  }
+
+  hasEditingPermissions(): boolean {
+    return !!(
+      this.profileService.isTitular(this.titular_id) ||
+      this.profileService.user?.is_superuser
+    );
   }
 
   save() {

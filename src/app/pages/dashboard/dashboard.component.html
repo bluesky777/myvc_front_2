@@ -1,1 +1,21 @@
-<app-sidenav></app-sidenav>
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="drawer.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>My Virtual College</span>
+</mat-toolbar>
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer class="example-sidenav" mode="side" [opened]="opened">
+    <app-sidenav></app-sidenav>
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <ng-container *ngIf="!authorizing && !user">
+      Actualmente no tienes acceso.
+    </ng-container>
+    <ng-container *ngIf="!authorizing && user">
+      <router-outlet></router-outlet>
+    </ng-container>
+    <ng-container *ngIf="authorizing"> Autenticando... </ng-container>
+  </mat-drawer-content>
+</mat-drawer-container>

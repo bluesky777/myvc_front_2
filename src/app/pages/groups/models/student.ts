@@ -11,4 +11,7 @@ export interface Student {
   expanded?: boolean;
   index?: number;
   studentPiar?: StudentPiar;
+  telefono: string;
+  celular: string;
+  direccion: string;
 }

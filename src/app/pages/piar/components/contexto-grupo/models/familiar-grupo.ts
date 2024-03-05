@@ -22,10 +22,23 @@ export interface StudentPiar {
   created_at: string;
   updated_at: string;
   updated_by: number;
+  acudientes: Acudiente[];
 }
 
 export interface GroupContextStudents {
   familiarContext: GroupContext[];
   alumnos: Student[];
   alumnos_piar: StudentPiar[];
+}
+
+interface Acudiente {
+  id: number;
+  nombres: string;
+  apellidos: string;
+  direccion?: any;
+  sexo: string;
+  email?: any;
+  celular: string;
+  parentesco: string;
+  telefono?: any;
 }

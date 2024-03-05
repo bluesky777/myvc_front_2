@@ -8,6 +8,7 @@
       color="warn"
       (click)="removeFile()"
       aria-label="Eliminar archivo"
+      *ngIf="hasEditingPermissions()"
     >
       <mat-icon>delete_forever</mat-icon>
     </button>
@@ -15,28 +16,30 @@
       <mat-icon color="primary">alarm</mat-icon>
     </button>
   </div>
-  <mat-form-field appearance="fill">
-    <mat-label>Arrastra aquí un archivo</mat-label>
-    <ngx-mat-dropzone>
-      <input type="file" fileInput formControlName="fileCtrl" />
-      @if (fileControl.value) {
-        <mat-chip-row (removed)="clear()">
-          {{ file.name }}
-          <button matChipRemove (click)="removeFile()">
-            <mat-icon>cancel</mat-icon>
-          </button>
-        </mat-chip-row>
-      }
-    </ngx-mat-dropzone>
-    <mat-icon matSuffix color="primary">cloud_upload</mat-icon>
-    <mat-error>Invalid file type</mat-error>
-  </mat-form-field>
-  <button
-    mat-raised-button
-    [disabled]="myForm.invalid"
-    (click)="uploadFile()"
-    color="primary"
-  >
-    Guardar
-  </button>
+  <ng-container *ngIf="hasEditingPermissions()">
+    <mat-form-field appearance="fill">
+      <mat-label>Arrastra aquí un archivo</mat-label>
+      <ngx-mat-dropzone>
+        <input type="file" fileInput formControlName="fileCtrl" />
+        @if (fileControl.value) {
+          <mat-chip-row (removed)="clear()">
+            {{ file.name }}
+            <button matChipRemove (click)="removeFile()">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+        }
+      </ngx-mat-dropzone>
+      <mat-icon matSuffix color="primary">cloud_upload</mat-icon>
+      <mat-error>Tipo de archivo inválido</mat-error>
+    </mat-form-field>
+    <button
+      mat-raised-button
+      [disabled]="myForm.invalid"
+      (click)="uploadFile()"
+      color="primary"
+    >
+      Guardar
+    </button>
+  </ng-container>
 </form>

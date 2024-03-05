@@ -3,25 +3,36 @@
     <mat-button-toggle-group
       [(value)]="selectedGroup"
       name="groupButtons"
-      aria-label="Font Style"
+      aria-label="Grupo"
     >
       @for (group of groups; track group.id) {
         <mat-button-toggle
           (change)="onGroupClick()"
-          value="{{ group.id }}"
+          [value]="group"
           style="line-height: 20px"
           >{{ group.abrev }}</mat-button-toggle
         >
       }
     </mat-button-toggle-group>
   </div>
-  <app-contexto-grupo
-    [loading]="loadingGroupData"
-    [record]="familiarContext"
-    [savingContext]="savingGroupContext"
-    (saveContext)="onSaveGroupContext($event)"
-  />
-  @if (alumnos.length > 0 && !loadingGroupData) {
-    <app-table-piar [alumnos]="alumnos"></app-table-piar>
+  <div *ngIf="selectedGroup" class="info_titular">
+    <span class="bold">Titular:</span>
+    {{ selectedGroup.nombres_titular }}
+    {{ selectedGroup.apellidos_titular }}
+  </div>
+  @if (selectedGroup) {
+    <app-contexto-grupo
+      [loading]="loadingGroupData"
+      [record]="familiarContext"
+      [titular_id]="selectedGroup.titular_id"
+      [savingContext]="savingGroupContext"
+      (saveContext)="onSaveGroupContext($event)"
+    />
+  }
+  @if (alumnos.length > 0 && !loadingGroupData && selectedGroup) {
+    <app-table-piar
+      [alumnos]="alumnos"
+      [titular_id]="selectedGroup.titular_id"
+    ></app-table-piar>
   }
 </section>

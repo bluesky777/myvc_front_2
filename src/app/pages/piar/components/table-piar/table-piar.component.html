@@ -46,15 +46,14 @@
         class="element-detail"
         [@detailExpand]="element.expanded ? 'expanded' : 'collapsed'"
       >
-        <div class="perfil-container">
-          <img [src]="element.foto_nombre" alt="Foto de perfil" />
-        </div>
+        <app-perfil-container [alumno]="element"></app-perfil-container>
         <div>
           <div class="caracterizacion-estudiante">
             <label>Valoración pedagógica</label>
             <app-file-upload
               [alumnoId]="element.studentPiar.alumno_id"
               [documentName]="element.studentPiar.documento1"
+              [titular_id]="titular_id"
             ></app-file-upload>
           </div>
         </div>
@@ -63,22 +62,20 @@
           <app-dynamic-textarea
             [dataText]="element.studentPiar.contexto_sociofamiliar"
             [dataId]="element.studentPiar.id"
+            [hasEditingPermissions]="true"
+            (saveText)="element.studentPiar.contexto_sociofamiliar = $event"
             dataField="contexto_sociofamiliar"
           ></app-dynamic-textarea>
         </div>
-        <div class="apoyo-ajustes-razonables">
-          <label>Apoyo y/o ajustes razonables</label>
-          <app-dynamic-textarea
-            [dataText]="element.studentPiar.apoyo_ajustes_razonables"
-            [dataId]="element.studentPiar.id"
-            dataField="apoyo_ajustes_razonables"
-          ></app-dynamic-textarea>
-        </div>
+
+        <app-apoyo-ajustes [alumno]="element"></app-apoyo-ajustes>
+
         <div class="acta-de-acuerdo">
           <label>Acta de acuerdo</label>
           <app-dynamic-textarea
             [dataText]="element.studentPiar.acta_de_acuerdo"
             [dataId]="element.studentPiar.id"
+            [hasEditingPermissions]="true"
             dataField="acta_de_acuerdo"
           ></app-dynamic-textarea>
         </div>

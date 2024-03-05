@@ -1,0 +1,31 @@
+<div class="asignaturas-list">
+  @if (loading) {
+    <div class="spinner-container">
+      <mat-spinner [diameter]="30"></mat-spinner>
+    </div>
+  } @else if (alumno.studentPiar) {
+    <mat-button-toggle-group
+      [(value)]="selectedAsignatura"
+      name="groupButtons"
+      aria-label="Grupo"
+    >
+      @for (asignatura of asignaturas; track asignatura.asignatura_id) {
+        <mat-button-toggle
+          (change)="onAsignaturaClick()"
+          [value]="asignatura"
+          style="line-height: 20px"
+          >{{ asignatura.alias_materia }}
+          {{ asignatura.abrev_grupo }}</mat-button-toggle
+        >
+      }
+    </mat-button-toggle-group>
+    <div class="apoyo-razonables">
+      <label>Apoyo y/o ajustes razonables</label>
+      <app-dynamic-textarea
+        [dataId]="alumno.studentPiar.id"
+        [hasEditingPermissions]="true"
+        dataField="apoyo_ajustes_razonables"
+      ></app-dynamic-textarea>
+    </div>
+  }
+</div>

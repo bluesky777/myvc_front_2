@@ -19,6 +19,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Editor, NgxEditorModule } from 'ngx-editor';
 import { ToastrService } from 'ngx-toastr';
+import { ProfileService } from '../../../../core/services/profile.service';
 import { toolbarDefaultOptions } from '../../../../shared/config/toolbar-options';
 import { StudentContextService } from '../table-piar/services/student-context.service';
 import { DynamicTextareaObject } from './models/dynamic-textarea-object';
@@ -49,6 +50,8 @@ export class DynamicTextareaComponent implements OnInit, OnDestroy {
 
   @Input() saving = false;
 
+  @Input() hasEditingPermissions!: boolean;
+
   editor!: Editor;
 
   editing = false;
@@ -61,6 +64,7 @@ export class DynamicTextareaComponent implements OnInit, OnDestroy {
     private studentContextService: StudentContextService,
     private toastr: ToastrService,
     private sanitizer: DomSanitizer,
+    private profileService: ProfileService,
   ) {}
 
   ngOnInit(): void {
@@ -94,6 +98,7 @@ export class DynamicTextareaComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res: any) => {
           this.toastr.success('Texto guardado.');
+          this.saveText.emit(this.doc.value);
         },
         error: (res: any) => {
           this.toastr.error('Error guardado texto.');

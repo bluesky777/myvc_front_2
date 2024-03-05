@@ -1,4 +1,4 @@
-@if (editing) {
+@if (editing && hasEditingPermissions) {
   <form [formGroup]="form">
     <article>
       <div class="NgxEditor__Wrapper">

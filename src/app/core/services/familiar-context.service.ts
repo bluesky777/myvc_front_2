@@ -14,7 +14,7 @@ import { ApiResponse } from '../models/api-response';
 export class FamiliarContextService {
   constructor(private httpService: HttpClient) {}
 
-  getFamiliarContext(group_id: string) {
+  getFamiliarContext(group_id: number) {
     return this.httpService.get<ApiResponse<GroupContextStudents>>(
       `${BACK_URL}/piars-grupos/contexto-de-grupo/${group_id}`,
     );

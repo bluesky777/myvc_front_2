@@ -13,26 +13,32 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { Student } from '../../../groups/models/student';
-import { DynamicTextareaComponent } from '../dynamic-textarea/dynamic-textarea.component';
-import { DynamicTextareaObject } from '../dynamic-textarea/models/dynamic-textarea-object';
-import { StudentContextService } from './services/student-context.service';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { ToastrService } from 'ngx-toastr';
+import { Asignatura } from '../../../../features/asignaturas/asignatura';
+import { Student } from '../../../groups/models/student';
+import { ApoyoAjustesComponent } from '../apoyo-ajustes/apoyo-ajustes.component';
+import { DynamicTextareaComponent } from '../dynamic-textarea/dynamic-textarea.component';
 import { FileUploadComponent } from '../file-upload/file-upload.component';
+import { PerfilContainerComponent } from '../perfil-container/perfil-container.component';
+import { AsignaturasService } from './../../../../features/asignaturas/asignaturas.services';
 
 @UntilDestroy()
 @Component({
   selector: 'app-table-piar',
   standalone: true,
   imports: [
-    MatTableModule,
-    MatButtonModule,
-    MatIconModule,
     DynamicTextareaComponent,
     FileUploadComponent,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatIconModule,
+    MatTableModule,
+    PerfilContainerComponent,
+    ApoyoAjustesComponent,
   ],
   templateUrl: './table-piar.component.html',
   styleUrl: './table-piar.component.scss',
@@ -50,6 +56,8 @@ import { FileUploadComponent } from '../file-upload/file-upload.component';
 export class TablePiarComponent implements OnInit, OnChanges {
   @Input() alumnos!: Student[];
 
+  @Input() titular_id!: number;
+
   filteredAlumnos: Student[] = [];
 
   columnsToDisplay = ['Nro', 'Apellidos', 'Nombres', 'Sexo'];
@@ -58,7 +66,10 @@ export class TablePiarComponent implements OnInit, OnChanges {
 
   filterPredicate = 'showOnlyNEE'; // 'showAll'
 
-  constructor(private toastr: ToastrService) {}
+  constructor(
+    private toastr: ToastrService,
+    private asignaturasService: AsignaturasService,
+  ) {}
 
   ngOnInit(): void {}
 

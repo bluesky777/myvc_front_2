@@ -33,6 +33,7 @@ import { Observable, catchError, map, of } from 'rxjs';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { FileUploadService } from './services/file-upload.service';
 import { Validators } from 'ngx-editor';
+import { ProfileService } from '../../../../core/services/profile.service';
 
 @Component({
   selector: 'app-file-upload',
@@ -53,7 +54,10 @@ import { Validators } from 'ngx-editor';
 })
 export class FileUploadComponent {
   @Input() alumnoId!: number;
+
   @Input() documentName?: string;
+
+  @Input() titular_id!: number;
 
   validators = [
     FileInputValidators.accept('application/pdf'),
@@ -64,11 +68,6 @@ export class FileUploadComponent {
 
   myForm: FormGroup;
 
-  // fileCtrl = new FormControl<File | null | File[]>(null, [
-  //   Validators.required,
-  //   this.fileTypeValidator(['pdf', 'doc', 'docx']),
-  // ]);
-
   UPLOADS_URL = UPLOADS_URL;
 
   documentNameAlone = '';
@@ -78,6 +77,7 @@ export class FileUploadComponent {
     private toastr: ToastrService,
     private fileUploadService: FileUploadService,
     private fb: FormBuilder,
+    private profileService: ProfileService,
   ) {
     this.myForm = this.fb.group({
       fileCtrl: [
@@ -128,6 +128,13 @@ export class FileUploadComponent {
       }
       return null;
     };
+  }
+
+  hasEditingPermissions(): boolean {
+    return !!(
+      this.profileService.isTitular(this.titular_id) ||
+      this.profileService.user?.is_superuser
+    );
   }
 
   get fileControl(): FormControl {

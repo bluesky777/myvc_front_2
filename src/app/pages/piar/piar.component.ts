@@ -32,7 +32,7 @@ import {
 export class PiarComponent implements OnInit {
   groups?: Group[];
 
-  selectedGroup?: string;
+  selectedGroup?: Group;
 
   familiarContext?: GroupContext;
 
@@ -72,7 +72,7 @@ export class PiarComponent implements OnInit {
     if (this.selectedGroup) {
       this.loadingGroupData = true;
       this.familiarContextService
-        .getFamiliarContext(this.selectedGroup)
+        .getFamiliarContext(this.selectedGroup.id)
         .subscribe({
           next: (res: ApiResponse<GroupContextStudents>) => {
             this.familiarContext = res.data.familiarContext[0];

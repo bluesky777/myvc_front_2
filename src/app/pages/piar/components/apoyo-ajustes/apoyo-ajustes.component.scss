@@ -1,0 +1,19 @@
+.asignaturas-list {
+  text-align: center;
+  padding-bottom: 40px;
+}
+.spinner-container {
+  display: flex;
+  justify-content: center;
+}
+.apoyo-razonables,
+.ajustes-razonables {
+  display: flex;
+  margin-bottom: 40px;
+  gap: 10px;
+
+  label {
+    width: 200px;
+    font-weight: 500;
+  }
+}
