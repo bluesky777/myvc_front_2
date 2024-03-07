@@ -14,11 +14,12 @@ export interface StudentPiar {
   id: number;
   alumno_id: number;
   year_id: number;
-  contexto_sociofamiliar?: any;
-  acta_de_acuerdo?: any;
-  documento1?: any;
-  documento2?: any;
-  config?: any;
+  valoracion_pedagogica?: string;
+  ajustes_generales?: string;
+  acta_de_acuerdo?: string;
+  documento1?: string;
+  documento2?: string;
+  history?: any;
   created_at: string;
   updated_at: string;
   updated_by: number;

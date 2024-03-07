@@ -11,3 +11,15 @@ mat-drawer-container {
     width: 200px;
   }
 }
+
+@media print {
+  .mat-toolbar {
+    display: none;
+  }
+  .mat-drawer-container {
+    background-color: #fff;
+  }
+  .mat-elevation-z8 {
+    box-shadow: unset;
+  }
+}

@@ -16,9 +16,15 @@
         @if (saving) {
           <mat-spinner [diameter]="30"></mat-spinner>
         } @else {
-          <button mat-raised-button (click)="cancel()">Cancelar</button>
+          <button mat-raised-button (click)="cancel()">
+            Cancelar o cerrar
+          </button>
           <button mat-raised-button color="primary" (click)="save()">
-            Guardar
+            @if (savingText) {
+              <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+            } @else {
+              Guardar
+            }
           </button>
         }
       </div>

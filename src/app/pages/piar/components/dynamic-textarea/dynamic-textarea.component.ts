@@ -57,6 +57,8 @@ export class DynamicTextareaComponent implements OnInit, OnDestroy {
 
   editing = false;
 
+  savingText = false;
+
   form!: FormGroup;
 
   toolbar = toolbarDefaultOptions;
@@ -88,6 +90,11 @@ export class DynamicTextareaComponent implements OnInit, OnDestroy {
   }
 
   save() {
+    if (this.savingText) {
+      return;
+    }
+    this.savingText = true;
+
     const data = {
       id: this.dataId,
       text: this.doc.value,
@@ -104,9 +111,11 @@ export class DynamicTextareaComponent implements OnInit, OnDestroy {
           next: (res: any) => {
             this.toastr.success('Texto guardado.');
             this.saveText.emit(this.doc.value);
+            this.savingText = false;
           },
           error: (res: any) => {
             this.toastr.error('Error guardado texto.');
+            this.savingText = false;
           },
         });
     } else {
@@ -117,15 +126,18 @@ export class DynamicTextareaComponent implements OnInit, OnDestroy {
           next: (res: any) => {
             this.toastr.success('Texto guardado.');
             this.saveText.emit(this.doc.value);
+            this.savingText = false;
           },
           error: (res: any) => {
             this.toastr.error('Error guardado texto.');
+            this.savingText = false;
           },
         });
     }
   }
 
   cancel() {
+    this.savingText = false;
     this.editing = false;
   }
 

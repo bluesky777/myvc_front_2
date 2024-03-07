@@ -1,39 +1,27 @@
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { Component, Input } from '@angular/core';
 import {
-  HttpClient,
-  HttpEvent,
-  HttpEventType,
-  HttpRequest,
-} from '@angular/common/http';
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import {
-  MatButton,
-  MatButtonModule,
-  MatFabButton,
-  MatIconButton,
-} from '@angular/material/button';
-import { UPLOADS_URL } from '../../../../core/CONSTANTS_URL';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import {
-  DropzoneCdkModule,
-  FileInputValidators,
-  FileInputValue,
-} from '@ngx-dropzone/cdk';
-import { DropzoneMaterialModule } from '@ngx-dropzone/material';
-import { MatIconModule } from '@angular/material/icon';
-import {
-  Form,
   FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
-import { Observable, catchError, map, of } from 'rxjs';
-import { ToastrModule, ToastrService } from 'ngx-toastr';
-import { FileUploadService } from './services/file-upload.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { DropzoneCdkModule, FileInputValidators } from '@ngx-dropzone/cdk';
+import { DropzoneMaterialModule } from '@ngx-dropzone/material';
 import { Validators } from 'ngx-editor';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { take } from 'rxjs';
+import { UPLOADS_URL } from '../../../../core/CONSTANTS_URL';
 import { ProfileService } from '../../../../core/services/profile.service';
+import { FileUploadService } from './services/file-upload.service';
+import { HistoryModalComponent } from './history-modal/history-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-file-upload',
@@ -48,6 +36,7 @@ import { ProfileService } from '../../../../core/services/profile.service';
     MatIconModule,
     ReactiveFormsModule,
     ToastrModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './file-upload.component.html',
   styleUrl: './file-upload.component.scss',
@@ -56,6 +45,10 @@ export class FileUploadComponent {
   @Input() alumnoId!: number;
 
   @Input() documentName?: string;
+
+  @Input() history!: any;
+
+  @Input() documentField = 'documento1';
 
   @Input() titular_id!: number;
 
@@ -72,12 +65,15 @@ export class FileUploadComponent {
 
   documentNameAlone = '';
 
+  savingFile = false;
+
   constructor(
     private http: HttpClient,
     private toastr: ToastrService,
     private fileUploadService: FileUploadService,
     private fb: FormBuilder,
     private profileService: ProfileService,
+    public dialog: MatDialog,
   ) {
     this.myForm = this.fb.group({
       fileCtrl: [
@@ -96,6 +92,10 @@ export class FileUploadComponent {
   }
 
   uploadFile() {
+    if (this.savingFile) return;
+
+    this.savingFile = true;
+
     if (!this.fileControl.value) return;
 
     const file = this.fileControl.value as File;
@@ -103,13 +103,24 @@ export class FileUploadComponent {
     const MAX_SIZE = 5000000; // 5MB
     if (file && file.size > MAX_SIZE) {
       this.toastr.success('Tamaño invalido');
+      return;
     }
 
-    this.fileUploadService.updateFile(file, this.alumnoId).subscribe({
-      next: (res) => {
-        console.log('Subs', res);
-      },
-    });
+    this.fileUploadService
+      .updateFile(file, this.alumnoId, this.documentField)
+      // .pipe(take(1))
+      .subscribe({
+        next: (res) => {
+          if (res.status === 'UploadStatus.UPLOADED') {
+            this.savingFile = false;
+            this.toastr.success('Archivo guardado');
+          }
+        },
+        error: () => {
+          this.savingFile = false;
+          this.toastr.warning('Error guardando archivo');
+        },
+      });
   }
 
   public removeFile(): void {
@@ -133,8 +144,18 @@ export class FileUploadComponent {
   hasEditingPermissions(): boolean {
     return !!(
       this.profileService.isTitular(this.titular_id) ||
-      this.profileService.user?.is_superuser
+      this.profileService.user?.tipo === 'Usuario'
     );
+  }
+
+  openDialogHistory(): void {
+    const dialogRef = this.dialog.open(HistoryModalComponent, {
+      data: this.history,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed');
+    });
   }
 
   get fileControl(): FormControl {

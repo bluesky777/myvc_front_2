@@ -17,15 +17,17 @@
           formControlName="editorContent"
         ></ngx-editor>
       </div>
-      <div *ngIf="hasEditingPermissions()" class="button-container">
-        @if (savingContext) {
-          <mat-spinner [diameter]="30"></mat-spinner>
-        } @else {
-          <button mat-raised-button color="primary" (click)="save()">
-            Guardar contexto de grupo
-          </button>
-        }
-      </div>
+      @if (hasEditingPermissions()) {
+        <div class="button-container">
+          @if (savingContext) {
+            <mat-spinner [diameter]="30"></mat-spinner>
+          } @else {
+            <button mat-raised-button color="primary" (click)="save()">
+              Guardar contexto de grupo
+            </button>
+          }
+        </div>
+      }
     </article>
   </form>
 }

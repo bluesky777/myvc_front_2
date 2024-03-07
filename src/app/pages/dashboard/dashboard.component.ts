@@ -53,7 +53,7 @@ export class DashboardComponent implements OnInit {
     this.authorizing = true;
     this.authService.getYears().subscribe({
       next: (res) => {
-        console.log(res);
+        // console.log(res);
       },
     });
     this.profileService.getData().subscribe({

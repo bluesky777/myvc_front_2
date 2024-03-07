@@ -16,10 +16,15 @@ export class FileUploadService {
 
   constructor(private http: HttpClient) {}
 
-  updateFile(file: File, alumnoId: number): Observable<any> {
+  updateFile(
+    file: File,
+    alumnoId: number,
+    documentField: string,
+  ): Observable<any> {
     const form = new FormData();
     form.append('file', file);
     form.append('alumno_id', alumnoId.toString());
+    form.append('documentField', documentField);
 
     const req = new HttpRequest('POST', this.uploadApiUrl, form, {
       reportProgress: true,
@@ -40,7 +45,7 @@ export class FileUploadService {
             progress: uploadProgress,
           };
         } else {
-          return undefined;
+          return res;
         }
       }),
       catchError((er) => {

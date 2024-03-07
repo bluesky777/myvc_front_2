@@ -1,0 +1,9 @@
+<h2 mat-dialog-title>Historial de los archivos</h2>
+<mat-dialog-content>
+  @for (item of history; track $index) {
+    <div>{{ item | json }}</div>
+  }
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button [mat-dialog-close]="" mat-button cdkFocusInitial>Cerrar</button>
+</mat-dialog-actions>

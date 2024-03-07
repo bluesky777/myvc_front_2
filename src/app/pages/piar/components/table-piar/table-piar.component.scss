@@ -67,3 +67,9 @@ tr.element-row:not(.expanded-row):active {
     flex-direction: column;
   }
 }
+@media print {
+  .mat-elevation-z8 {
+    box-shadow: unset;
+    border: 1px solid #000;
+  }
+}

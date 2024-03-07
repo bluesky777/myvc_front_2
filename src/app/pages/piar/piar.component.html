@@ -15,12 +15,12 @@
       }
     </mat-button-toggle-group>
   </div>
-  <div *ngIf="selectedGroup" class="info_titular">
-    <span class="bold">Titular:</span>
-    {{ selectedGroup.nombres_titular }}
-    {{ selectedGroup.apellidos_titular }}
-  </div>
   @if (selectedGroup) {
+    <div class="info_titular">
+      <span class="bold">Titular:</span>
+      {{ selectedGroup.nombres_titular }}
+      {{ selectedGroup.apellidos_titular }}
+    </div>
     <app-contexto-grupo
       [loading]="loadingGroupData"
       [record]="familiarContext"

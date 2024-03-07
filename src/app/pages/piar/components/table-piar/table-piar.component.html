@@ -49,22 +49,35 @@
         <app-perfil-container [alumno]="element"></app-perfil-container>
         <div>
           <div class="caracterizacion-estudiante">
-            <label>Valoración pedagógica</label>
+            <label style="padding-top: 15px"
+              >Caracterización del estudiante</label
+            >
             <app-file-upload
               [alumnoId]="element.studentPiar.alumno_id"
               [documentName]="element.studentPiar.documento1"
               [titular_id]="selectedGroup.titular_id"
+              [history]="element.studentPiar.history"
             ></app-file-upload>
           </div>
         </div>
         <div class="caracterizacion-estudiante">
-          <label>Caracterización del estudiante</label>
+          <label>Valoración pedagógica</label>
           <app-dynamic-textarea
-            [dataText]="element.studentPiar.contexto_sociofamiliar"
+            [dataText]="element.studentPiar.valoracion_pedagogica"
             [dataId]="element.studentPiar.id"
             [hasEditingPermissions]="true"
-            (saveText)="element.studentPiar.contexto_sociofamiliar = $event"
-            dataField="contexto_sociofamiliar"
+            (saveText)="element.studentPiar.valoracion_pedagogica = $event"
+            dataField="valoracion_pedagogica"
+          ></app-dynamic-textarea>
+        </div>
+        <div class="caracterizacion-estudiante">
+          <label>Ajustes generales</label>
+          <app-dynamic-textarea
+            [dataText]="element.studentPiar.ajustes_generales"
+            [dataId]="element.studentPiar.id"
+            [hasEditingPermissions]="true"
+            (saveText)="element.studentPiar.ajustes_generales = $event"
+            dataField="ajustes_generales"
           ></app-dynamic-textarea>
         </div>
 
@@ -74,13 +87,14 @@
         ></app-apoyo-ajustes>
 
         <div class="acta-de-acuerdo">
-          <label>Acta de acuerdo</label>
-          <app-dynamic-textarea
-            [dataText]="element.studentPiar.acta_de_acuerdo"
-            [dataId]="element.studentPiar.id"
-            [hasEditingPermissions]="true"
-            dataField="acta_de_acuerdo"
-          ></app-dynamic-textarea>
+          <label style="padding-top: 15px">Acta de acuerdo</label>
+          <app-file-upload
+            [alumnoId]="element.studentPiar.alumno_id"
+            [documentName]="element.studentPiar.documento2"
+            [titular_id]="selectedGroup.titular_id"
+            [history]="element.studentPiar.history"
+            documentField="documento2"
+          ></app-file-upload>
         </div>
       </div>
     </td>
