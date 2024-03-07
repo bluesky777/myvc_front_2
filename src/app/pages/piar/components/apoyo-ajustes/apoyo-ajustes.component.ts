@@ -7,6 +7,7 @@ import { AsignaturasService } from '../../../../features/asignaturas/asignaturas
 import { Group } from '../../../groups/models/groups';
 import { Student } from '../../../groups/models/student';
 import { DynamicTextareaComponent } from '../dynamic-textarea/dynamic-textarea.component';
+import { ProfileService } from '../../../../core/services/profile.service';
 
 @Component({
   selector: 'app-apoyo-ajustes',
@@ -31,18 +32,30 @@ export class ApoyoAjustesComponent {
 
   loading = true;
 
-  constructor(private asignaturasService: AsignaturasService) {}
+  constructor(
+    private asignaturasService: AsignaturasService,
+    private profileService: ProfileService,
+  ) {}
 
   ngOnInit(): void {
-    this.asignaturasService.getAsignaturas(this.alumno.id).subscribe({
-      next: (asignaturas: Asignatura[]) => {
-        this.asignaturas = asignaturas.filter((asignatura) => {
-          return asignatura.grupo_id === this.selectedGroup.id;
-        });
-        this.loading = false;
-      },
-    });
+    this.asignaturasService
+      .getAsignaturas(this.selectedGroup.id, this.alumno.id)
+      .subscribe({
+        next: (asignaturas: Asignatura[]) => {
+          this.asignaturas = asignaturas.filter((asignatura) => {
+            return asignatura.grupo_id === this.selectedGroup.id;
+          });
+          this.loading = false;
+        },
+      });
   }
 
   onAsignaturaClick() {}
+
+  hasDocenteOrAdminPermissions(docente_asignatura_id: number) {
+    return !!(
+      this.profileService.user?.persona_id === docente_asignatura_id ||
+      this.profileService.user?.is_superuser
+    );
+  }
 }

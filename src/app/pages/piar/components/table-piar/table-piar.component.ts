@@ -18,14 +18,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { ToastrService } from 'ngx-toastr';
-import { Asignatura } from '../../../../features/asignaturas/asignatura';
+import { ProfileService } from '../../../../core/services/profile.service';
+import { Group } from '../../../groups/models/groups';
 import { Student } from '../../../groups/models/student';
 import { ApoyoAjustesComponent } from '../apoyo-ajustes/apoyo-ajustes.component';
 import { DynamicTextareaComponent } from '../dynamic-textarea/dynamic-textarea.component';
 import { FileUploadComponent } from '../file-upload/file-upload.component';
+import { InformePedagogicoComponent } from '../informe-pedagogico/informe-pedagogico.component';
 import { PerfilContainerComponent } from '../perfil-container/perfil-container.component';
 import { AsignaturasService } from './../../../../features/asignaturas/asignaturas.services';
-import { Group } from '../../../groups/models/groups';
 
 @UntilDestroy()
 @Component({
@@ -40,6 +41,7 @@ import { Group } from '../../../groups/models/groups';
     MatTableModule,
     PerfilContainerComponent,
     ApoyoAjustesComponent,
+    InformePedagogicoComponent,
   ],
   templateUrl: './table-piar.component.html',
   styleUrl: './table-piar.component.scss',
@@ -70,6 +72,7 @@ export class TablePiarComponent implements OnInit, OnChanges {
   constructor(
     private toastr: ToastrService,
     private asignaturasService: AsignaturasService,
+    private profileService: ProfileService,
   ) {}
 
   ngOnInit(): void {}
@@ -95,5 +98,12 @@ export class TablePiarComponent implements OnInit, OnChanges {
   }): void {
     element.expanded = !element.expanded;
     $event?.stopPropagation();
+  }
+
+  hasTitularOrAdminPermissions() {
+    return !!(
+      this.profileService.isTitular(this.selectedGroup.titular_id) ||
+      this.profileService.user?.is_superuser
+    );
   }
 }

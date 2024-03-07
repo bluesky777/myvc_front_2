@@ -60,6 +60,10 @@ tr.element-row:not(.expanded-row):active {
   }
 }
 
+app-informe-pedagogico {
+  margin-bottom: 50px;
+}
+
 @media (max-width: 700px) {
   .apoyo-ajustes-razonables,
   .caracterizacion-estudiante,
@@ -71,5 +75,8 @@ tr.element-row:not(.expanded-row):active {
   .mat-elevation-z8 {
     box-shadow: unset;
     border: 1px solid #000;
+  }
+  app-informe-pedagogico {
+    margin-bottom: 0;
   }
 }

@@ -1,0 +1,11 @@
+<div class="informe-container">
+  <div class="informe-header">
+    <button mat-raised-button color="primary" (click)="showReports()">
+      Informe de proceso pedagógico
+    </button>
+  </div>
+  @if (isShowing) {
+    <div class="informe-config">Aún está en desarrollo.</div>
+    <div class="informe-body">Aquí aparecerá su informe.</div>
+  }
+</div>

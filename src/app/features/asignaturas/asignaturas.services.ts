@@ -9,9 +9,9 @@ import { BACK_URL } from '../../core/CONSTANTS_URL';
 export class AsignaturasService {
   constructor(private http: HttpClient) {}
 
-  getAsignaturas(alumno_id: number): Observable<any> {
+  getAsignaturas(grupo_id: number, alumno_id: number): Observable<any> {
     return this.http.get(
-      `${BACK_URL}/piars-asignaturas/asignaturas/${alumno_id}`,
+      `${BACK_URL}/piars-asignaturas/asignaturas/${grupo_id}/${alumno_id}`,
     );
   }
 }

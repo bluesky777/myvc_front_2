@@ -108,7 +108,6 @@ export class FileUploadComponent {
 
     this.fileUploadService
       .updateFile(file, this.alumnoId, this.documentField)
-      // .pipe(take(1))
       .subscribe({
         next: (res) => {
           if (res.status === 'UploadStatus.UPLOADED') {
@@ -142,10 +141,7 @@ export class FileUploadComponent {
   }
 
   hasEditingPermissions(): boolean {
-    return !!(
-      this.profileService.isTitular(this.titular_id) ||
-      this.profileService.user?.tipo === 'Usuario'
-    );
+    return !!(this.profileService.user?.tipo === 'Usuario');
   }
 
   openDialogHistory(): void {

@@ -22,6 +22,8 @@
         <mat-icon color="primary">alarm</mat-icon>
       </button>
     </div>
+  } @else if (!hasEditingPermissions()) {
+    <div class="alert-not-file">(No se ha subido archivo aún)</div>
   }
 
   @if (hasEditingPermissions()) {

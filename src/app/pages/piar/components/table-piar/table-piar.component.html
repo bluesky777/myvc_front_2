@@ -65,7 +65,7 @@
           <app-dynamic-textarea
             [dataText]="element.studentPiar.valoracion_pedagogica"
             [dataId]="element.studentPiar.id"
-            [hasEditingPermissions]="true"
+            [hasEditingPermissions]="hasTitularOrAdminPermissions()"
             (saveText)="element.studentPiar.valoracion_pedagogica = $event"
             dataField="valoracion_pedagogica"
           ></app-dynamic-textarea>
@@ -75,7 +75,7 @@
           <app-dynamic-textarea
             [dataText]="element.studentPiar.ajustes_generales"
             [dataId]="element.studentPiar.id"
-            [hasEditingPermissions]="true"
+            [hasEditingPermissions]="hasTitularOrAdminPermissions()"
             (saveText)="element.studentPiar.ajustes_generales = $event"
             dataField="ajustes_generales"
           ></app-dynamic-textarea>
@@ -96,6 +96,7 @@
             documentField="documento2"
           ></app-file-upload>
         </div>
+        <app-informe-pedagogico></app-informe-pedagogico>
       </div>
     </td>
   </ng-container>

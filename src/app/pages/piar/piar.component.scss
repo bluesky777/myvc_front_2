@@ -18,3 +18,18 @@ section {
     margin-bottom: 20px;
   }
 }
+
+@media print {
+  .content-header,
+  .info_titular,
+  app-contexto-grupo {
+    display: none;
+  }
+  section {
+    padding: 0;
+
+    .content-header {
+      display: none;
+    }
+  }
+}
