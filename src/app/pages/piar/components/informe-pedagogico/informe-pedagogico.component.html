@@ -1,11 +1,20 @@
 <div class="informe-container">
   <div class="informe-header">
-    <button mat-raised-button color="primary" (click)="showReports()">
+    <button
+      mat-raised-button
+      color="primary"
+      [class.hidden-print]="isShowing"
+      (click)="showReports()"
+    >
       Informe de proceso pedagógico
     </button>
   </div>
   @if (isShowing) {
     <div class="informe-config">Aún está en desarrollo.</div>
     <div class="informe-body">Aquí aparecerá su informe.</div>
+    <img
+      [src]="getImage(alumno.foto_nombre, alumno.sexo)"
+      alt="Foto de perfil"
+    />
   }
 </div>

@@ -46,22 +46,33 @@
         class="element-detail"
         [@detailExpand]="element.expanded ? 'expanded' : 'collapsed'"
       >
-        <app-perfil-container [alumno]="element"></app-perfil-container>
-        <div>
+        <app-perfil-container
+          class="hidden-print"
+          [alumno]="element"
+        ></app-perfil-container>
+        <div class="hidden-print">
           <div class="caracterizacion-estudiante">
-            <label style="padding-top: 15px"
-              >Caracterización del estudiante</label
-            >
-            <app-file-upload
-              [alumnoId]="element.studentPiar.alumno_id"
-              [documentName]="element.studentPiar.documento1"
-              [titular_id]="selectedGroup.titular_id"
-              [history]="element.studentPiar.history"
-            ></app-file-upload>
+            <label style="padding-top: 15px">
+              <span>Caracterización del estudiante</span>
+              <span>(modificado por el psicólogo(a))</span>
+            </label>
+            @if (!isChangingFile) {
+              <app-file-upload
+                [alumnoId]="element.studentPiar.alumno_id"
+                [documentName]="element.studentPiar.documento1"
+                [titular_id]="selectedGroup.titular_id"
+                [history]="element.studentPiar.history"
+                (updatedFile)="handleUpdatedFile(element, $event)"
+                documentField="documento1"
+              ></app-file-upload>
+            }
           </div>
         </div>
-        <div class="caracterizacion-estudiante">
-          <label>Valoración pedagógica</label>
+        <div class="caracterizacion-estudiante hidden-print">
+          <label>
+            <span>Valoración pedagógica</span>
+            <span>(modificado por el titular)</span>
+          </label>
           <app-dynamic-textarea
             [dataText]="element.studentPiar.valoracion_pedagogica"
             [dataId]="element.studentPiar.id"
@@ -70,8 +81,11 @@
             dataField="valoracion_pedagogica"
           ></app-dynamic-textarea>
         </div>
-        <div class="caracterizacion-estudiante">
-          <label>Ajustes generales</label>
+        <div class="caracterizacion-estudiante hidden-print">
+          <label>
+            <span>Ajustes generales</span>
+            <span>(modificado por el titular)</span>
+          </label>
           <app-dynamic-textarea
             [dataText]="element.studentPiar.ajustes_generales"
             [dataId]="element.studentPiar.id"
@@ -82,21 +96,28 @@
         </div>
 
         <app-apoyo-ajustes
+          class="hidden-print"
           [alumno]="element"
           [selectedGroup]="selectedGroup"
         ></app-apoyo-ajustes>
 
-        <div class="acta-de-acuerdo">
-          <label style="padding-top: 15px">Acta de acuerdo</label>
-          <app-file-upload
-            [alumnoId]="element.studentPiar.alumno_id"
-            [documentName]="element.studentPiar.documento2"
-            [titular_id]="selectedGroup.titular_id"
-            [history]="element.studentPiar.history"
-            documentField="documento2"
-          ></app-file-upload>
+        <div class="acta-de-acuerdo hidden-print">
+          <label style="padding-top: 15px">
+            <span>Acta de acuerdo</span>
+            <span>(modificado por el titular)</span>
+          </label>
+          @if (!isChangingFile) {
+            <app-file-upload
+              [alumnoId]="element.studentPiar.alumno_id"
+              [documentName]="element.studentPiar.documento2"
+              [titular_id]="selectedGroup.titular_id"
+              [history]="element.studentPiar.history"
+              (updatedFile)="handleUpdatedFile(element, $event)"
+              documentField="documento2"
+            ></app-file-upload>
+          }
         </div>
-        <app-informe-pedagogico></app-informe-pedagogico>
+        <app-informe-pedagogico [alumno]="element"></app-informe-pedagogico>
       </div>
     </td>
   </ng-container>

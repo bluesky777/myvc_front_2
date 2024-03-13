@@ -36,7 +36,7 @@ import { CommonModule } from '@angular/common';
 export class DashboardComponent implements OnInit {
   user?: Profile;
 
-  opened = false;
+  opened = true;
 
   authorizing = false;
 

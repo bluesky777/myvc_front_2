@@ -1,7 +1,12 @@
 :host {
   display: flex;
   flex-direction: column;
-  height: 100%;
+}
+
+@media screen {
+  :host {
+    height: 100%;
+  }
 }
 
 mat-drawer-container {
@@ -9,6 +14,11 @@ mat-drawer-container {
 
   mat-drawer {
     width: 200px;
+  }
+  @media print {
+    mat-drawer {
+      display: none;
+    }
   }
 }
 
@@ -19,7 +29,15 @@ mat-drawer-container {
   .mat-drawer-container {
     background-color: #fff;
   }
+  mat-drawer-content {
+    margin-left: 0 !important;
+  }
   .mat-elevation-z8 {
     box-shadow: unset;
+  }
+  :host {
+    app-dashboard {
+      height: unset;
+    }
   }
 }

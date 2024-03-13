@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -22,6 +22,11 @@ import { ProfileService } from '../../../../core/services/profile.service';
 import { FileUploadService } from './services/file-upload.service';
 import { HistoryModalComponent } from './history-modal/history-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+
+export type UploadedDocument = {
+  documentField: string;
+  fileName: string;
+};
 
 @Component({
   selector: 'app-file-upload',
@@ -51,6 +56,8 @@ export class FileUploadComponent {
   @Input() documentField = 'documento1';
 
   @Input() titular_id!: number;
+
+  @Output() updatedFile = new EventEmitter<UploadedDocument>();
 
   validators = [
     FileInputValidators.accept('application/pdf'),
@@ -84,7 +91,11 @@ export class FileUploadComponent {
   }
 
   ngOnInit(): void {
-    this.documentNameAlone = this.documentName?.split('/')[1] || '';
+    if (this.documentName && this.documentName.indexOf('/') > -1) {
+      this.documentNameAlone = this.documentName?.split('/')[1] || '';
+    } else {
+      this.documentNameAlone = this.documentName as string;
+    }
   }
 
   clear() {
@@ -113,6 +124,10 @@ export class FileUploadComponent {
           if (res.status === 'UploadStatus.UPLOADED') {
             this.savingFile = false;
             this.toastr.success('Archivo guardado');
+            this.updatedFile.emit({
+              documentField: this.documentField,
+              fileName: file.name,
+            } as UploadedDocument);
           }
         },
         error: () => {
@@ -141,7 +156,14 @@ export class FileUploadComponent {
   }
 
   hasEditingPermissions(): boolean {
-    return !!(this.profileService.user?.tipo === 'Usuario');
+    if (this.documentField === 'document2') {
+      return !!(
+        this.profileService.user?.tipo === 'Profesor' &&
+        this.titular_id === this.profileService.user?.persona_id
+      );
+    } else {
+      return !!(this.profileService.user?.tipo === 'Usuario');
+    }
   }
 
   openDialogHistory(): void {

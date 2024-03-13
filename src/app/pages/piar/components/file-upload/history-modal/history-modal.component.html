@@ -1,7 +1,16 @@
 <h2 mat-dialog-title>Historial de los archivos</h2>
 <mat-dialog-content>
   @for (item of history; track $index) {
-    <div>{{ item | json }}</div>
+    <div class="history-content">
+      @if (item.documento1) {
+        <div>Documento 1: {{ item.documento1 }}</div>
+      }
+      @if (item.documento2) {
+        <div>Documento 2: {{ item.documento2 }}</div>
+      }
+      <div>Modificado en: {{ item.updated_at }}</div>
+      <div>Modificado por: {{ item.updated_by_name }}</div>
+    </div>
   }
 </mat-dialog-content>
 <mat-dialog-actions>

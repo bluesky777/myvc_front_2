@@ -23,7 +23,10 @@ import { Group } from '../../../groups/models/groups';
 import { Student } from '../../../groups/models/student';
 import { ApoyoAjustesComponent } from '../apoyo-ajustes/apoyo-ajustes.component';
 import { DynamicTextareaComponent } from '../dynamic-textarea/dynamic-textarea.component';
-import { FileUploadComponent } from '../file-upload/file-upload.component';
+import {
+  FileUploadComponent,
+  UploadedDocument,
+} from '../file-upload/file-upload.component';
 import { InformePedagogicoComponent } from '../informe-pedagogico/informe-pedagogico.component';
 import { PerfilContainerComponent } from '../perfil-container/perfil-container.component';
 import { AsignaturasService } from './../../../../features/asignaturas/asignaturas.services';
@@ -69,13 +72,22 @@ export class TablePiarComponent implements OnInit, OnChanges {
 
   filterPredicate = 'showOnlyNEE'; // 'showAll'
 
+  isChangingFile = false;
+
   constructor(
     private toastr: ToastrService,
     private asignaturasService: AsignaturasService,
     private profileService: ProfileService,
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // TODO: erase this
+    setTimeout(() => {
+      this.onRowClick({
+        element: this.alumnos[0],
+      });
+    }, 500);
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     const alumnos = changes['alumnos']?.currentValue as Student[];
@@ -94,7 +106,7 @@ export class TablePiarComponent implements OnInit, OnChanges {
     $event,
   }: {
     element: Student;
-    $event: MouseEvent;
+    $event?: MouseEvent;
   }): void {
     element.expanded = !element.expanded;
     $event?.stopPropagation();
@@ -105,5 +117,15 @@ export class TablePiarComponent implements OnInit, OnChanges {
       this.profileService.isTitular(this.selectedGroup.titular_id) ||
       this.profileService.user?.is_superuser
     );
+  }
+
+  handleUpdatedFile(alumno: Student, $event: UploadedDocument) {
+    this.isChangingFile = true;
+    if ($event.documentField === 'documento1') {
+      alumno.studentPiar!.documento1 = $event.fileName;
+    } else {
+      alumno.studentPiar!.documento2 = $event.fileName;
+    }
+    setTimeout(() => (this.isChangingFile = false), 200);
   }
 }

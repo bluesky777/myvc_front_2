@@ -4,7 +4,7 @@
       <a [href]="UPLOADS_URL + '/' + documentName" target="_blank">{{
         documentNameAlone
       }}</a>
-      @if (hasEditingPermissions()) {
+      @if (hasEditingPermissions() && false) {
         <button
           mat-icon-button
           color="warn"
@@ -45,7 +45,7 @@
     </mat-form-field>
     @if (savingFile) {
       <mat-spinner color="accent" [diameter]="20"></mat-spinner>
-    } @else {
+    } @else if (!fileControl.invalid) {
       <button mat-raised-button (click)="uploadFile()" color="primary">
         Guardar
       </button>
