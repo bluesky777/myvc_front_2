@@ -11,6 +11,8 @@ import { Year } from './../../../../core/models/year';
 import { YearsService } from './../../../../core/services/years.service';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
+import { IMAGES_URL } from '../../../../core/CONSTANTS_URL';
+import { Group } from '../../../groups/models/groups';
 
 @UntilDestroy()
 @Component({
@@ -29,6 +31,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class InformePedagogicoComponent implements OnInit {
   @Input() alumno!: Student;
 
+  @Input() grupo!: Group;
+
   isShowingReport = false;
 
   isShowingLogo = true;
@@ -40,6 +44,8 @@ export class InformePedagogicoComponent implements OnInit {
   isShowingFirmaTitular = true;
 
   year?: Year;
+
+  IMAGES_URL = IMAGES_URL;
 
   constructor(
     private profileService: ProfileService,
@@ -63,9 +69,7 @@ export class InformePedagogicoComponent implements OnInit {
     this.isShowingReport = !this.isShowingReport;
   }
 
-  getSanitizedText() {
-    return this.sanitizer.bypassSecurityTrustHtml(
-      this.year?.encabezado_certificado || '',
-    );
+  getSanitizedText(text: string) {
+    return this.sanitizer.bypassSecurityTrustHtml(text);
   }
 }

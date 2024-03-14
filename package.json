@@ -20,6 +20,7 @@
     "@angular/platform-browser": "^17.1.0",
     "@angular/platform-browser-dynamic": "^17.1.0",
     "@angular/router": "^17.1.0",
+    "@fontsource/open-sans": "^5.0.27",
     "@ngneat/until-destroy": "^10.0.0",
     "@ngx-dropzone/cdk": "^17.2.0",
     "@ngx-dropzone/material": "^17.2.0",

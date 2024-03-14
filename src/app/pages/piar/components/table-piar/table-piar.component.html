@@ -117,7 +117,10 @@
             ></app-file-upload>
           }
         </div>
-        <app-informe-pedagogico [alumno]="element"></app-informe-pedagogico>
+        <app-informe-pedagogico
+          [alumno]="element"
+          [grupo]="selectedGroup"
+        ></app-informe-pedagogico>
       </div>
     </td>
   </ng-container>

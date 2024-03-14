@@ -1,3 +1,9 @@
+:host {
+  font-family: "Open Sans";
+}
+.bold {
+  font-weight: 600;
+}
 .informe-container {
   align-items: center;
   background-color: #eee;
@@ -16,6 +22,7 @@
   background-color: aliceblue;
   margin: 30px;
   display: flex;
+  flex-direction: column;
   align-items: center;
 
   label {
@@ -24,12 +31,19 @@
 }
 
 .informe-body {
-  .header-page {
+  .header-informe {
     display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .header-informe__institution {
+      display: flex;
+    }
 
     .header-logo,
     .header-foto {
       width: 100px;
+      margin: auto;
 
       img {
         width: 100%;
@@ -56,6 +70,18 @@
         font-size: 11pt;
         font-weight: bold;
       }
+    }
+
+    .header-informe__student {
+      display: flex;
+      justify-content: space-between;
+    }
+    .header-informe__student-name {
+      font-weight: bold;
+      font-size: 12pt;
+    }
+    .header-informe__titular {
+      font-size: 8pt;
     }
   }
 }
