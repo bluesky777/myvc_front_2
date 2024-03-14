@@ -8,8 +8,4 @@ import { BACK_URL } from '../../../core/CONSTANTS_URL';
 })
 export class AuthService {
   constructor(private httpService: HttpClient) {}
-
-  getYears(): Observable<any> {
-    return this.httpService.get(`${BACK_URL}/years`);
-  }
 }

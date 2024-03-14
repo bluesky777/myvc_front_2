@@ -51,11 +51,12 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.authorizing = true;
-    this.authService.getYears().subscribe({
+    this.yearsService.getYears().subscribe({
       next: (res) => {
         // console.log(res);
       },
     });
+
     this.profileService.getData().subscribe({
       next: (user: unknown) => {
         if ((user as Array<any>).length === 0) {

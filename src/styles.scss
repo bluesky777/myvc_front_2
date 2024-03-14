@@ -15,12 +15,22 @@ body {
 .center {
   text-align: center;
 }
+.page-vertical {
+  width: 22cm;
+  background-color: #fff;
+}
 
 @media print {
+  .page-vertical {
+    width: 100%;
+  }
   tr[mat-header-row] {
     display: none;
   }
   .hidden-print {
     display: none !important;
+  }
+  td {
+    border: 0;
   }
 }

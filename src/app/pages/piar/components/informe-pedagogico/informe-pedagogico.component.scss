@@ -1,8 +1,70 @@
+.informe-container {
+  align-items: center;
+  background-color: #eee;
+  box-shadow: 0 0 5px #ccc inset;
+  display: flex;
+  flex-direction: column;
+  max-height: 40cm;
+  overflow: auto;
+  padding: 10px;
+}
 .informe-header {
   text-align: center;
 }
-.pru {
-  height: 200px;
-  background-color: aqua;
+.informe-config section {
+  padding: 30px;
+  background-color: aliceblue;
   margin: 30px;
+  display: flex;
+  align-items: center;
+
+  label {
+    font-weight: 600;
+  }
+}
+
+.informe-body {
+  .header-page {
+    display: flex;
+
+    .header-logo,
+    .header-foto {
+      width: 100px;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    .header-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .header-info__school-name {
+        font-size: 14pt;
+        font-weight: bold;
+      }
+
+      .header-info__encabezado-certificado {
+        font-size: 8pt;
+        text-align: center;
+      }
+
+      .header-info__certificado {
+        font-size: 11pt;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+@media print {
+  .informe-container {
+    padding: 0;
+    box-shadow: unset;
+    background-color: #fff;
+    border: 0;
+  }
 }

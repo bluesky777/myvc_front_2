@@ -81,12 +81,16 @@ app-informe-pedagogico {
 @media print {
   .mat-elevation-z8 {
     box-shadow: unset;
-    border: 1px solid #000;
+    border: 0px solid #000;
   }
   app-informe-pedagogico {
     margin-bottom: 0;
   }
   tr.element-row {
     display: none;
+  }
+  .expanded-row + .detail-row td {
+    padding: 0;
+    box-shadow: unset;
   }
 }

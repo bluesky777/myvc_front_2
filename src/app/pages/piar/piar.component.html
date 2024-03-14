@@ -1,5 +1,5 @@
 <section>
-  <div class="content-header">
+  <div class="content-header" [class.hidden-print]="selectedGroup">
     <mat-button-toggle-group
       [(value)]="selectedGroup"
       name="groupButtons"
