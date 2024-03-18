@@ -15,6 +15,11 @@ import {
   GroupContextStudents,
   StudentPiar,
 } from './components/contexto-grupo/models/familiar-grupo';
+import {
+  InformePedagogicoService,
+  StudentAndGroup,
+} from './components/informe-pedagogico/services/informe-pedagogico.services';
+import { InformePedagogicoComponent } from './components/informe-pedagogico/informe-pedagogico.component';
 
 @Component({
   selector: 'app-piar',
@@ -22,6 +27,7 @@ import {
   imports: [
     CommonModule,
     ContextoGrupoComponent,
+    InformePedagogicoComponent,
     MatButtonToggleModule,
     TablePiarComponent,
     ToastrModule,
@@ -46,11 +52,14 @@ export class PiarComponent implements OnInit {
 
   alumnosPiar: StudentPiar[] = [];
 
+  studentAndGroup?: StudentAndGroup;
+
   constructor(
     private groupsService: GroupsService,
     private familiarContextService: FamiliarContextService,
     private studentService: StudentService,
     private toastr: ToastrService,
+    private informePedagogicoService: InformePedagogicoService,
   ) {}
 
   ngOnInit(): void {
@@ -66,6 +75,12 @@ export class PiarComponent implements OnInit {
         console.log(err);
       },
     });
+
+    this.informePedagogicoService.studentAndGroup$.subscribe(
+      (studentAndGroup: StudentAndGroup) => {
+        this.studentAndGroup = studentAndGroup;
+      },
+    );
   }
 
   onGroupClick() {
@@ -76,6 +91,13 @@ export class PiarComponent implements OnInit {
         .subscribe({
           next: (res: ApiResponse<GroupContextStudents>) => {
             this.familiarContext = res.data.familiarContext[0];
+
+            if (this.selectedGroup) {
+              this.selectedGroup.firma_titular_nombre =
+                res.data.grupo.firma_titular_nombre;
+              this.selectedGroup.firma_id = res.data.grupo.firma_id;
+            }
+
             this.alumnos = res.data.alumnos.map((alumno) => {
               const alumno_piar = res.data.alumnos_piar.filter(
                 (alum) => alum.alumno_id === alumno.id,

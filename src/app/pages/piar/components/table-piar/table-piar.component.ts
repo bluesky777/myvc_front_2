@@ -1,3 +1,4 @@
+import { InformePedagogicoService } from './../informe-pedagogico/services/informe-pedagogico.services';
 import {
   animate,
   state,
@@ -77,6 +78,7 @@ export class TablePiarComponent implements OnInit, OnChanges {
   constructor(
     private toastr: ToastrService,
     private asignaturasService: AsignaturasService,
+    private informePedagogicoService: InformePedagogicoService,
     private profileService: ProfileService,
   ) {}
 
@@ -110,6 +112,10 @@ export class TablePiarComponent implements OnInit, OnChanges {
   }): void {
     element.expanded = !element.expanded;
     $event?.stopPropagation();
+    this.informePedagogicoService.setStudentAndGroup({
+      alumno: element,
+      grupo: this.selectedGroup,
+    });
   }
 
   hasTitularOrAdminPermissions() {

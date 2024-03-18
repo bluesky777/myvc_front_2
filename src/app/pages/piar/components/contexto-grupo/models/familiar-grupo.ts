@@ -1,3 +1,4 @@
+import { Group } from '../../../../groups/models/groups';
 import { Student } from '../../../../groups/models/student';
 
 export interface GroupContext {
@@ -19,6 +20,7 @@ export interface StudentPiar {
   acta_de_acuerdo?: string;
   documento1?: string;
   documento2?: string;
+  reporte: null | string;
   history?: any;
   created_at: string;
   updated_at: string;
@@ -30,6 +32,7 @@ export interface GroupContextStudents {
   familiarContext: GroupContext[];
   alumnos: Student[];
   alumnos_piar: StudentPiar[];
+  grupo: Group;
 }
 
 interface Acudiente {

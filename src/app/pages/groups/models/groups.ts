@@ -15,4 +15,7 @@ export interface Group {
   created_at: string;
   updated_at: string;
   nombre_grado: string;
+
+  firma_id?: number;
+  firma_titular_nombre?: string;
 }

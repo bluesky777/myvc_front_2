@@ -52,7 +52,7 @@ export class ContextoGrupoComponent implements OnInit, OnDestroy, OnChanges {
   form = new FormGroup({
     editorContent: new FormControl({
       value: this.contextoGrupoRecord?.caracterizacion_grupo || '',
-      disabled: false,
+      disabled: this.hasEditingPermissions(),
     }),
   });
 

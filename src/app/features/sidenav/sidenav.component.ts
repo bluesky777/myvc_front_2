@@ -43,6 +43,10 @@ export class SidenavComponent {
       title: 'Ruta de inclusión',
       route: '/piar',
     },
+    {
+      title: 'Configuración',
+      route: '/configuration',
+    },
     // {
     //   title: 'Profile',
     //   route: '/profile',

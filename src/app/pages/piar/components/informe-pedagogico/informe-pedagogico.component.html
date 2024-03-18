@@ -52,9 +52,7 @@
             <div
               class="header-info__encabezado-certificado"
               [innerHTML]="getSanitizedText(year?.encabezado_certificado || '')"
-            >
-              {{ year?.encabezado_certificado }}
-            </div>
+            ></div>
             <div class="header-info__certificado">
               Informe de proceso pedagógico {{ year?.year }}
             </div>
@@ -84,10 +82,100 @@
       </div>
 
       <div class="content-informe">
-        <div></div>
+        <form [formGroup]="form">
+          @if (showingEditor) {
+            <div class="NgxEditor__Wrapper">
+              <ngx-editor-menu
+                [editor]="editor"
+                [toolbar]="toolbar"
+              ></ngx-editor-menu>
+              <ngx-editor
+                [editor]="editor"
+                [placeholder]="'Escriba aquí...'"
+                formControlName="editorContent"
+              ></ngx-editor>
+            </div>
+            <div class="buttons-edit-container hidden-print">
+              @if (savingText) {
+                <mat-spinner [diameter]="30"></mat-spinner>
+              } @else {
+                <button mat-raised-button (click)="cancel()">
+                  Cancelar o cerrar
+                </button>
+                <button mat-raised-button color="primary" (click)="save()">
+                  @if (savingText) {
+                    <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+                  } @else {
+                    Guardar
+                  }
+                </button>
+              }
+            </div>
+          }
+        </form>
+        <div class="button-container">
+          <div
+            class="sanitized-container"
+            [class.hidden-screen]="showingEditor"
+          >
+            <div [innerHTML]="getSanitizedText(editorContent.value)"></div>
+            <button
+              class="edit-button-sanitized hidden-print"
+              mat-raised-button
+              (click)="edit()"
+              color="primary"
+            >
+              Editar reporte
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div class="footer-informe">Firmas</div>
+      <div class="footer-informe">
+        @if (year) {
+          <div class="firmas-container no-break-print">
+            <div class="firma-titular">
+              <div class="firma_img_container">
+                @if (isShowingFirmaTitular && grupo.abrev) {
+                  <img
+                    [src]="IMAGES_URL + '/' + grupo.firma_titular_nombre"
+                    alt="Firma titular"
+                  />
+                }
+              </div>
+              <div class="firma-nombre-persona">
+                {{ grupo.nombres_titular + " " + grupo.apellidos_titular }}
+              </div>
+              <div class="firma_titulo">Titular</div>
+            </div>
+            <div class="firma-rector">
+              <div class="firma_img_container">
+                @if (isShowingFirmaRector && year.rector_firma_id) {
+                  <img
+                    [src]="IMAGES_URL + '/' + year.rector_firma"
+                    alt="Firma rector"
+                  />
+                }
+              </div>
+              <div class="firma-nombre-persona">
+                {{ year.nombres_rector + " " + year.apellidos_rector }}
+              </div>
+              <div class="firma_titulo">
+                @if (year.titulo_rector) {
+                  {{ year.titulo_rector }}
+                } @else {
+                  @if (year.sexo_rector === "M") {
+                    Rector
+                  }
+                  @if (year.sexo_rector === "F") {
+                    Rectora
+                  }
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
     </div>
   }
 </div>

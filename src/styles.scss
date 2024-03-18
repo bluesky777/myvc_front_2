@@ -19,10 +19,18 @@ body {
   width: 22cm;
   background-color: #fff;
 }
+ngx-editor {
+  overflow-y: scroll;
+  height: calc(100% - 40px);
+  display: block;
+}
 
 @media print {
   .page-vertical {
     width: 100%;
+  }
+  .header-informe {
+    page-break-inside: avoid;
   }
   tr[mat-header-row] {
     display: none;
@@ -30,7 +38,21 @@ body {
   .hidden-print {
     display: none !important;
   }
-  td {
+  .detail-row td {
     border: 0;
+    display: block;
+    box-shadow: unset;
+    page-break-inside: auto;
+  }
+  .hidden-screen {
+    display: block;
+  }
+  .no-break-print {
+    page-break-inside: avoid;
+  }
+}
+@media screen {
+  .hidden-screen {
+    display: none;
   }
 }

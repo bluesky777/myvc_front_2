@@ -57,6 +57,12 @@ export class DashboardComponent implements OnInit {
       },
     });
 
+    this.yearsService.getPiarConfig().subscribe({
+      next: (res) => {
+        // console.log(res);
+      },
+    });
+
     this.profileService.getData().subscribe({
       next: (user: unknown) => {
         if ((user as Array<any>).length === 0) {
