@@ -4,15 +4,19 @@
       <a [href]="UPLOADS_URL + '/' + documentName" target="_blank">{{
         documentNameAlone
       }}</a>
-      @if (hasEditingPermissions() && false) {
-        <button
-          mat-icon-button
-          color="warn"
-          (click)="removeFile()"
-          aria-label="Eliminar archivo"
-        >
-          <mat-icon>delete_forever</mat-icon>
-        </button>
+      @if (hasEditingPermissions()) {
+        @if (deletingFile) {
+          <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+        } @else {
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="removeFile()"
+            aria-label="Eliminar archivo"
+          >
+            <mat-icon>delete_forever</mat-icon>
+          </button>
+        }
       }
       <button
         (click)="openDialogHistory()"
@@ -26,7 +30,7 @@
     <div class="alert-not-file">(No se ha subido archivo aún)</div>
   }
 
-  @if (hasEditingPermissions()) {
+  @if (hasEditingPermissions() && !documentName) {
     <mat-form-field appearance="fill">
       <mat-label>Arrastra aquí un archivo</mat-label>
       <ngx-mat-dropzone>
@@ -34,7 +38,7 @@
         @if (fileControl.value) {
           <mat-chip-row (removed)="clear()">
             {{ file.name }}
-            <button matChipRemove (click)="removeFile()">
+            <button matChipRemove (click)="cancelFile()">
               <mat-icon>cancel</mat-icon>
             </button>
           </mat-chip-row>

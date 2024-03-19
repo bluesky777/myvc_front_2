@@ -12,7 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -47,6 +47,7 @@ export class DashboardComponent implements OnInit {
     private yearsService: YearsService,
     private groupsService: GroupsService,
     private profileService: ProfileService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -74,5 +75,9 @@ export class DashboardComponent implements OnInit {
         this.authorizing = false;
       },
     });
+  }
+
+  isDashboard(): boolean {
+    return this.router.url === '/';
   }
 }

@@ -13,7 +13,7 @@ export const routes: Routes = [
         component: PiarComponent,
       },
       {
-        path: 'config',
+        path: 'configuration',
         component: ConfigurationComponent,
       },
     ],

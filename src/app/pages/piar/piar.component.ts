@@ -52,8 +52,6 @@ export class PiarComponent implements OnInit {
 
   alumnosPiar: StudentPiar[] = [];
 
-  studentAndGroup?: StudentAndGroup;
-
   constructor(
     private groupsService: GroupsService,
     private familiarContextService: FamiliarContextService,
@@ -75,12 +73,6 @@ export class PiarComponent implements OnInit {
         console.log(err);
       },
     });
-
-    this.informePedagogicoService.studentAndGroup$.subscribe(
-      (studentAndGroup: StudentAndGroup) => {
-        this.studentAndGroup = studentAndGroup;
-      },
-    );
   }
 
   onGroupClick() {

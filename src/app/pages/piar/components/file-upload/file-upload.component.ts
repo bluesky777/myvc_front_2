@@ -74,6 +74,8 @@ export class FileUploadComponent {
 
   savingFile = false;
 
+  deletingFile = false;
+
   constructor(
     private http: HttpClient,
     private toastr: ToastrService,
@@ -138,6 +140,27 @@ export class FileUploadComponent {
   }
 
   public removeFile(): void {
+    this.deletingFile = true;
+
+    this.fileUploadService
+      .deleteFile(this.alumnoId, this.documentField)
+      .subscribe({
+        next: () => {
+          this.documentName = undefined;
+          this.toastr.success('Archivo eliminado.');
+          this.cancelFile();
+          this.savingFile = false;
+          this.deletingFile = false;
+        },
+        error: () => {
+          this.toastr.error('Lo sentimos, no se pudo subir el archivo.');
+          this.deletingFile = false;
+          this.savingFile = false;
+        },
+      });
+  }
+
+  public cancelFile(): void {
     this.fileControl.setValue(null);
   }
 

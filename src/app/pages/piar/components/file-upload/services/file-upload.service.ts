@@ -54,4 +54,10 @@ export class FileUploadService {
       }),
     );
   }
+
+  deleteFile(alumnoId: number, file_name: string): Observable<any> {
+    return this.http.delete(`${this.uploadApiUrl}/${alumnoId}`, {
+      body: JSON.stringify({ file_name }),
+    });
+  }
 }

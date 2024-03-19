@@ -19,5 +19,15 @@
     @if (authorizing) {
       Autenticando...
     }
+    @if (isDashboard()) {
+      <div class="wellcome-container hidden-print">
+        <h1>Bienvenido a la Ruta de inclusión</h1>
+        <p>
+          En esta aplicación podrán trabajar todos juntos en estrategias y
+          compromisos que permitan que cada estudiante tenga las oportunidades
+          necesarias para tener un desarrollo inclusivo y armonioso.
+        </p>
+      </div>
+    }
   </mat-drawer-content>
 </mat-drawer-container>

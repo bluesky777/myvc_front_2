@@ -112,10 +112,6 @@ export class TablePiarComponent implements OnInit, OnChanges {
   }): void {
     element.expanded = !element.expanded;
     $event?.stopPropagation();
-    this.informePedagogicoService.setStudentAndGroup({
-      alumno: element,
-      grupo: this.selectedGroup,
-    });
   }
 
   hasTitularOrAdminPermissions() {
