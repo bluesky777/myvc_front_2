@@ -4,7 +4,13 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --base-href=https://casb.micolevirtual.com/plus/",
+    "buildCasb": "ng build --base-href=https://casb.micolevirtual.com/plus/",
+    "buildCoab": "ng build --base-href=https://coab.micolevirtual.com/plus/",
+    "buildCads": "ng build --base-href=https://cads.micolevirtual.com/plus/",
+    "buildLal": "ng build --base-href=https://lalvirtual.edu.co/plus/",
+    "buildCoal": "ng build --base-href=https://coal.micolevirtual.com/plus/",
+    "buildJordan": "ng build --base-href=https://coljordan.micolevirtual.com/plus/",
+    "buildBosque": "ng build --base-href=https://colbosque.micolevirtual.com/plus/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

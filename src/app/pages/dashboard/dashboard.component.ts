@@ -36,7 +36,7 @@ import { CommonModule } from '@angular/common';
 export class DashboardComponent implements OnInit {
   user?: Profile;
 
-  opened = true;
+  opened = this.isProductNotActivated() ? false : true;
 
   authorizing = false;
 
@@ -55,6 +55,9 @@ export class DashboardComponent implements OnInit {
     this.yearsService.getYears().subscribe({
       next: (res) => {
         // console.log(res);
+      },
+      error: () => {
+        this.authorizing = false;
       },
     });
 
@@ -79,5 +82,28 @@ export class DashboardComponent implements OnInit {
 
   isDashboard(): boolean {
     return this.router.url === '/';
+  }
+
+  isProductNotActivated(): boolean {
+    const currentHostname = document.location.hostname;
+    const notActivatedDomains = [
+      'amiguitosdejesus.micolevirtual.com',
+      'bethel.micolevirtual.com',
+      'bethelexplora.micolevirtual.com',
+      'cads.micolevirtual.com',
+      'caz.micolevirtual.com',
+      'coaf.micolevirtual.com',
+      'coal.micolevirtual.com',
+      'colbosque.micolevirtual.com',
+      'coljordan.micolevirtual.com',
+      'comad.micolevirtual.com',
+      'eal.micolevirtual.com',
+      'inseaq.micolevirtual.com',
+      'maranatha.micolevirtual.com',
+      'semillitasdedios.micolevirtual.com',
+      'lalvirtual.edu.co',
+      // 'localhost',
+    ];
+    return notActivatedDomains.includes(currentHostname);
   }
 }

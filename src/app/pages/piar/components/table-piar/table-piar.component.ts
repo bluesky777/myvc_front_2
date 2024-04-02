@@ -84,11 +84,11 @@ export class TablePiarComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     // TODO: erase this
-    setTimeout(() => {
-      this.onRowClick({
-        element: this.alumnos[0],
-      });
-    }, 500);
+    // setTimeout(() => {
+    //   this.onRowClick({
+    //     element: this.alumnos[0],
+    //   });
+    // }, 500);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
