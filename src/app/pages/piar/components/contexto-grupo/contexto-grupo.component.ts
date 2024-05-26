@@ -49,20 +49,19 @@ export class ContextoGrupoComponent implements OnInit, OnDestroy, OnChanges {
 
   editor!: Editor;
 
-  form = new FormGroup({
-    editorContent: new FormControl({
-      value: this.contextoGrupoRecord?.caracterizacion_grupo || '',
-      disabled: !this.hasEditingPermissions(),
-    }),
-  });
+  form?: FormGroup;
 
   toolbar = toolbarDefaultOptions;
+
+  hasEditingPermissions = false;
 
   constructor(private profileService: ProfileService) {}
 
   ngOnInit(): void {
     this.editor = new Editor();
     const user = this.profileService.user;
+    this.setHasEditingPermissions();
+    this.createForm();
   }
 
   ngOnDestroy(): void {
@@ -71,7 +70,7 @@ export class ContextoGrupoComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     const groupContext = changes['contextoGrupoRecord']?.currentValue;
-    if (groupContext) {
+    if (groupContext && this.form) {
       this.form
         .get('editorContent')
         ?.setValue(groupContext.caracterizacion_grupo);
@@ -79,14 +78,23 @@ export class ContextoGrupoComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   get doc(): FormControl {
-    return this.form.get('editorContent') as FormControl;
+    return this.form!.get('editorContent') as FormControl;
   }
 
-  hasEditingPermissions(): boolean {
-    return !!(
+  setHasEditingPermissions(): void {
+    this.hasEditingPermissions = !!(
       this.profileService.isTitular(this.titular_id) ||
       this.profileService.user?.is_superuser
     );
+  }
+
+  createForm() {
+    this.form = new FormGroup({
+      editorContent: new FormControl({
+        value: this.contextoGrupoRecord?.caracterizacion_grupo || '',
+        disabled: !this.hasEditingPermissions,
+      }),
+    });
   }
 
   save() {

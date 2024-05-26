@@ -2,7 +2,7 @@
   <div class="spinner-container">
     <mat-spinner [diameter]="30"></mat-spinner>
   </div>
-} @else if (contextoGrupoRecord) {
+} @else if (contextoGrupoRecord && form) {
   <form [formGroup]="form">
     <article>
       <div class="NgxEditor__Wrapper">
@@ -16,7 +16,7 @@
           formControlName="editorContent"
         ></ngx-editor>
       </div>
-      @if (hasEditingPermissions()) {
+      @if (hasEditingPermissions) {
         <div class="button-container">
           @if (savingContext) {
             <mat-spinner [diameter]="30"></mat-spinner>
