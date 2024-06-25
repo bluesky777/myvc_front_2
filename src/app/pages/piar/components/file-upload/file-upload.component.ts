@@ -81,7 +81,7 @@ export class FileUploadComponent {
     private toastr: ToastrService,
     private fileUploadService: FileUploadService,
     private fb: FormBuilder,
-    private profileService: ProfileService,
+    public profileService: ProfileService,
     public dialog: MatDialog,
   ) {
     this.myForm = this.fb.group({
@@ -179,7 +179,7 @@ export class FileUploadComponent {
   }
 
   hasEditingPermissions(): boolean {
-    if (this.documentField === 'document2') {
+    if (this.documentField === 'documento2') {
       return !!(
         this.profileService.user?.tipo === 'Profesor' &&
         this.titular_id === this.profileService.user?.persona_id
