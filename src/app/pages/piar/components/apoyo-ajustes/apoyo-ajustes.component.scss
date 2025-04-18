@@ -1,0 +1,28 @@
+.asignaturas-list {
+  padding-bottom: 20px;
+  background-color: aliceblue;
+  box-shadow: 0 0 5px #ccc inset;
+  padding-top: 20px;
+  padding-inline: 10px;
+  margin-bottom: 30px;
+  min-height: 51px;
+}
+.asignaturas-header {
+  display: flex;
+  justify-content: center;
+}
+.field-row {
+  display: flex;
+  margin-top: 20px;
+  gap: 10px;
+
+  label {
+    width: 200px;
+    font-weight: 500;
+    text-align: right;
+  }
+
+  app-dynamic-textarea {
+    flex: 1;
+  }
+}

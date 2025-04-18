@@ -1,34 +1,20 @@
-<mat-toolbar color="primary">
-  <button mat-icon-button (click)="drawer.toggle()">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <span>My Virtual College</span>
-</mat-toolbar>
-<mat-drawer-container class="example-container" autosize>
-  <mat-drawer #drawer class="example-sidenav" mode="side" opened>
-    <mat-nav-list>
-      @for (group of navigationGroups; track $index) {
-        @if (!group.items) {
-          <a mat-list-item [routerLink]="group.route">{{ group.title }}</a>
-        } @else {
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>{{ group.title }}</mat-panel-title>
-            </mat-expansion-panel-header>
-            @for (item of group.items; track $index) {
-              <mat-nav-list>
-                <a mat-list-item routerLink="{{ item.route }}">
-                  {{ item.label }}
-                </a>
-              </mat-nav-list>
-            }
-          </mat-expansion-panel>
+<mat-nav-list>
+  @for (group of navigationGroups; track $index) {
+    @if (!group.items) {
+      <a mat-list-item [routerLink]="group.route">{{ group.title }}</a>
+    } @else {
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{ group.title }}</mat-panel-title>
+        </mat-expansion-panel-header>
+        @for (item of group.items; track $index) {
+          <mat-nav-list>
+            <a mat-list-item routerLink="{{ item.route }}">
+              {{ item.label }}
+            </a>
+          </mat-nav-list>
         }
-      }
-    </mat-nav-list>
-  </mat-drawer>
-
-  <mat-drawer-content>
-    <router-outlet></router-outlet>
-  </mat-drawer-content>
-</mat-drawer-container>
+      </mat-expansion-panel>
+    }
+  }
+</mat-nav-list>

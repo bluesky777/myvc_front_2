@@ -1,0 +1,157 @@
+:host {
+  font-family: "Open Sans";
+}
+.bold {
+  font-weight: 600;
+}
+.informe-container {
+  align-items: center;
+  background-color: #eee;
+  box-shadow: 0 0 5px #ccc inset;
+  display: flex;
+  flex-direction: column;
+  max-height: 40cm;
+  overflow: auto;
+  padding: 10px;
+}
+.informe-header {
+  text-align: center;
+}
+.informe-config section {
+  padding: 30px;
+  background-color: aliceblue;
+  margin: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  label {
+    font-weight: 600;
+  }
+}
+
+.informe-body {
+  .header-informe {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .header-informe__institution {
+      display: flex;
+    }
+
+    .header-logo,
+    .header-foto {
+      width: 100px;
+      margin: auto;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    .header-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .header-info__school-name {
+        font-size: 14pt;
+        font-weight: bold;
+      }
+
+      .header-info__encabezado-certificado {
+        font-size: 8pt;
+        text-align: center;
+      }
+
+      .header-info__certificado {
+        font-size: 13pt;
+        font-weight: bold;
+      }
+    }
+
+    .header-informe__student {
+      display: flex;
+      justify-content: space-between;
+    }
+    .header-informe__student-name {
+      font-weight: bold;
+      font-size: 12pt;
+    }
+    .header-informe__titular {
+      font-size: 8pt;
+    }
+  }
+  .firmas-container {
+    display: flex;
+
+    .firma-titular,
+    .firma-rector {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .firma-nombre-persona {
+      font-weight: 600;
+    }
+    .firma-nombre-persona,
+    .firma_img_container,
+    .firma_titulo {
+      text-align: center;
+    }
+    .firma-nombre-persona,
+    .firma_titulo {
+      z-index: 2;
+    }
+    .firma_img_container {
+      height: 90px;
+      position: relative;
+      min-height: 1px;
+      z-index: 1;
+
+      img {
+        height: 110px;
+      }
+    }
+  }
+}
+.NgxEditor__Wrapper {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  height: 350px;
+  margin-inline: 20px;
+  margin-top: 20px;
+  box-shadow:
+    0px 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0px 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+
+  @media print {
+    display: none;
+  }
+}
+.buttons-edit-container {
+  display: flex;
+  justify-content: center;
+  margin-block: 20px;
+}
+.sanitized-container {
+  position: relative;
+
+  .edit-button-sanitized {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}
+
+@media print {
+  .informe-container {
+    padding: 0;
+    box-shadow: unset;
+    background-color: #fff;
+    border: 0;
+    max-height: unset;
+  }
+}

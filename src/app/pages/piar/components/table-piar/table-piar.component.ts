@@ -1,3 +1,4 @@
+import { InformePedagogicoService } from './../informe-pedagogico/services/informe-pedagogico.services';
 import {
   animate,
   state,
@@ -5,15 +6,47 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { Component } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
+import { UntilDestroy } from '@ngneat/until-destroy';
+import { ToastrService } from 'ngx-toastr';
+import { ProfileService } from '../../../../core/services/profile.service';
+import { Group } from '../../../groups/models/groups';
+import { Student } from '../../../groups/models/student';
+import { ApoyoAjustesComponent } from '../apoyo-ajustes/apoyo-ajustes.component';
+import { DynamicTextareaComponent } from '../dynamic-textarea/dynamic-textarea.component';
+import {
+  FileUploadComponent,
+  UploadedDocument,
+} from '../file-upload/file-upload.component';
+import { InformePedagogicoComponent } from '../informe-pedagogico/informe-pedagogico.component';
+import { PerfilContainerComponent } from '../perfil-container/perfil-container.component';
+import { AsignaturasService } from './../../../../features/asignaturas/asignaturas.services';
 
+@UntilDestroy()
 @Component({
   selector: 'app-table-piar',
   standalone: true,
-  imports: [MatTableModule, MatButtonModule, MatIconModule],
+  imports: [
+    DynamicTextareaComponent,
+    FileUploadComponent,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatIconModule,
+    MatTableModule,
+    PerfilContainerComponent,
+    ApoyoAjustesComponent,
+    InformePedagogicoComponent,
+  ],
   templateUrl: './table-piar.component.html',
   styleUrl: './table-piar.component.scss',
   animations: [
@@ -27,60 +60,74 @@ import { MatTableModule } from '@angular/material/table';
     ]),
   ],
 })
-export class TablePiarComponent {
-  dataSource = ELEMENT_DATA;
-  columnsToDisplay = ['apellidos', 'nombres', 'symbol', 'position'];
-  columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
-  expandedElement?: PeriodicElement;
+export class TablePiarComponent implements OnInit, OnChanges {
+  @Input() alumnos!: Student[];
 
-  onRowClick(alumno: PeriodicElement) {
-    alumno.expanded = !alumno.expanded;
+  @Input() selectedGroup!: Group;
+
+  filteredAlumnos: Student[] = [];
+
+  columnsToDisplay = ['Nro', 'Apellidos', 'Nombres', 'Sexo'];
+
+  columnsToDisplayWithExpand = [...this.columnsToDisplay, 'ERE', 'expand'];
+
+  filterPredicate = 'showOnlyNEE'; // 'showAll'
+
+  isChangingFile = false;
+
+  constructor(
+    private toastr: ToastrService,
+    private asignaturasService: AsignaturasService,
+    private informePedagogicoService: InformePedagogicoService,
+    private profileService: ProfileService,
+  ) {}
+
+  ngOnInit(): void {
+    // TODO: erase this
+    // setTimeout(() => {
+    //   this.onRowClick({
+    //     element: this.alumnos[0],
+    //   });
+    // }, 500);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const alumnos = changes['alumnos']?.currentValue as Student[];
+    if (alumnos) {
+      this.alumnos = alumnos
+        .filter((alum) => alum.studentPiar?.id)
+        .map((alumno, index) => ({
+          ...alumno,
+          nro: index + 1,
+        }));
+    }
+  }
+
+  onRowClick({
+    element,
+    $event,
+  }: {
+    element: Student;
+    $event?: MouseEvent;
+  }): void {
+    element.expanded = !element.expanded;
+    $event?.stopPropagation();
+  }
+
+  hasTitularOrAdminPermissions() {
+    return !!(
+      this.profileService.isTitular(this.selectedGroup.titular_id) ||
+      this.profileService.user?.is_superuser
+    );
+  }
+
+  handleUpdatedFile(alumno: Student, $event: UploadedDocument) {
+    this.isChangingFile = true;
+    if ($event.documentField === 'documento1') {
+      alumno.studentPiar!.documento1 = $event.fileName;
+    } else {
+      alumno.studentPiar!.documento2 = $event.fileName;
+    }
+    setTimeout(() => (this.isChangingFile = false), 200);
   }
 }
-
-export interface PeriodicElement {
-  nombres: string;
-  apellidos: number;
-  weight: number;
-  symbol: string;
-  description: string;
-  expanded?: boolean;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {
-    apellidos: 1,
-    nombres: 'Hydrogen',
-    weight: 1.0079,
-    symbol: 'H',
-    description: `Hydrogen is a chemical element with symbol H and atomic number 1. With a standard
-        atomic weight of 1.008, hydrogen is the lightest element on the periodic table.`,
-  },
-  {
-    apellidos: 2,
-    nombres: 'Helium',
-    weight: 4.0026,
-    symbol: 'He',
-    description: `Helium is a chemical element with symbol He and atomic number 2. It is a
-        colorless, odorless, tasteless, non-toxic, inert, monatomic gas, the first in the noble gas
-        group in the periodic table. Its boiling point is the lowest among all the elements.`,
-  },
-  {
-    apellidos: 3,
-    nombres: 'Lithium',
-    weight: 6.941,
-    symbol: 'Li',
-    description: `Lithium is a chemical element with symbol Li and atomic number 3. It is a soft,
-        silvery-white alkali metal. Under standard conditions, it is the lightest metal and the
-        lightest solid element.`,
-  },
-  {
-    apellidos: 4,
-    nombres: 'Beryllium',
-    weight: 9.0122,
-    symbol: 'Be',
-    description: `Beryllium is a chemical element with symbol Be and atomic number 4. It is a
-        relatively rare element in the universe, usually occurring as a product of the spallation of
-        larger atomic nuclei that have collided with cosmic rays.`,
-  },
-];

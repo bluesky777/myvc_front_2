@@ -1,0 +1,46 @@
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen {
+  :host {
+    height: 100%;
+  }
+}
+
+mat-drawer-container {
+  flex: 1;
+
+  mat-drawer {
+    width: 200px;
+  }
+  @media print {
+    mat-drawer {
+      display: none;
+    }
+  }
+}
+.welcome-container {
+  padding: 20px;
+}
+
+@media print {
+  .mat-toolbar {
+    display: none;
+  }
+  .mat-drawer-container {
+    background-color: #fff;
+  }
+  mat-drawer-content {
+    margin-left: 0 !important;
+  }
+  .mat-elevation-z8 {
+    box-shadow: unset;
+  }
+  :host {
+    app-dashboard {
+      height: unset;
+    }
+  }
+}

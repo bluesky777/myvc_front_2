@@ -1,26 +1,63 @@
-import { GroupsService } from './../../core/services/groups.service';
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { Group } from '../groups/models/groups';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { ApiResponse } from '../../core/models/api-response';
+import { FamiliarContextService } from '../../core/services/familiar-context.service';
 import { StudentService } from '../../core/services/student.service';
-import { CommonModule } from '@angular/common';
+import { Group } from '../groups/models/groups';
+import { Student } from '../groups/models/student';
+import { GroupsService } from './../../core/services/groups.service';
 import { TablePiarComponent } from './components/table-piar/table-piar.component';
+import { ContextoGrupoComponent } from './components/contexto-grupo/contexto-grupo.component';
+import {
+  GroupContext,
+  GroupContextStudents,
+  StudentPiar,
+} from './components/contexto-grupo/models/familiar-grupo';
+import {
+  InformePedagogicoService,
+  StudentAndGroup,
+} from './components/informe-pedagogico/services/informe-pedagogico.services';
+import { InformePedagogicoComponent } from './components/informe-pedagogico/informe-pedagogico.component';
 
 @Component({
   selector: 'app-piar',
   standalone: true,
-  imports: [MatButtonToggleModule, CommonModule, TablePiarComponent],
+  imports: [
+    CommonModule,
+    ContextoGrupoComponent,
+    InformePedagogicoComponent,
+    MatButtonToggleModule,
+    TablePiarComponent,
+    ToastrModule,
+  ],
   templateUrl: './piar.component.html',
   styleUrl: './piar.component.scss',
 })
 export class PiarComponent implements OnInit {
   groups?: Group[];
-  selectedGroup?: string;
+
+  selectedGroup?: Group;
+
+  familiarContext?: GroupContext;
+
   students?: any[];
+
+  loadingGroupData = false;
+
+  savingGroupContext = false;
+
+  alumnos: Student[] = [];
+
+  alumnosPiar: StudentPiar[] = [];
 
   constructor(
     private groupsService: GroupsService,
+    private familiarContextService: FamiliarContextService,
     private studentService: StudentService,
+    private toastr: ToastrService,
+    private informePedagogicoService: InformePedagogicoService,
   ) {}
 
   ngOnInit(): void {
@@ -40,14 +77,50 @@ export class PiarComponent implements OnInit {
 
   onGroupClick() {
     if (this.selectedGroup) {
-      this.studentService.getStudents(this.selectedGroup).subscribe({
-        next: (res) => {
-          this.students = res;
-        },
-        error: (err) => {
-          console.log(err);
-        },
-      });
+      this.loadingGroupData = true;
+      this.familiarContextService
+        .getFamiliarContext(this.selectedGroup.id)
+        .subscribe({
+          next: (res: ApiResponse<GroupContextStudents>) => {
+            this.familiarContext = res.data.familiarContext[0];
+
+            if (this.selectedGroup) {
+              this.selectedGroup.firma_titular_nombre =
+                res.data.grupo.firma_titular_nombre;
+              this.selectedGroup.firma_id = res.data.grupo.firma_id;
+            }
+
+            this.alumnos = res.data.alumnos.map((alumno) => {
+              const alumno_piar = res.data.alumnos_piar.filter(
+                (alum) => alum.alumno_id === alumno.id,
+              );
+              return {
+                ...alumno,
+                studentPiar:
+                  alumno_piar.length > 0 ? alumno_piar[0] : undefined,
+              };
+            });
+            this.loadingGroupData = false;
+          },
+          error: (err) => {
+            this.loadingGroupData = false;
+            console.log(err);
+          },
+        });
     }
+  }
+
+  onSaveGroupContext(familiarContext: GroupContext) {
+    this.savingGroupContext = true;
+    this.familiarContextService.saveGroupContext(familiarContext).subscribe({
+      next: (res: ApiResponse<GroupContext>) => {
+        this.savingGroupContext = false;
+        this.toastr.success('Contexto familiar guardado');
+      },
+      error: (err) => {
+        this.savingGroupContext = false;
+        this.toastr.error('Error guardando contexto familiar');
+      },
+    });
   }
 }

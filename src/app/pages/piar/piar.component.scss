@@ -1,0 +1,30 @@
+.mat-button-toggle-group .mat-button-toggle-label-content {
+  line-height: 30px !important;
+}
+
+html {
+  --mat-standard-button-toggle-height: 30px !important;
+}
+
+.info_titular {
+  padding: 4px;
+}
+
+section {
+  padding: 8px;
+
+  .content-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+}
+
+@media print {
+  .info_titular,
+  app-contexto-grupo {
+    display: none;
+  }
+  section {
+    padding: 0;
+  }
+}

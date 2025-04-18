@@ -1,0 +1,30 @@
+:host {
+  display: block;
+}
+
+.uploader-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.document-url {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding-bottom: 20px;
+
+  a {
+    padding-right: 10px;
+  }
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.alert-not-file {
+  padding-top: 15px;
+  font-style: italic;
+  color: #3f51b5;
+}

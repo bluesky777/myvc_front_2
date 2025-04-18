@@ -1,0 +1,181 @@
+<div class="informe-container">
+  <div class="informe-header">
+    <button
+      mat-raised-button
+      [class.hidden-print]="isShowingReport"
+      (click)="showReports()"
+    >
+      Informe de proceso pedagógico
+    </button>
+  </div>
+  @if (isShowingReport) {
+    <div class="informe-config hidden-print">
+      <section>
+        <div>
+          <label>Configurar reporte</label>
+        </div>
+        <div>
+          <mat-checkbox class="example-margin" [(ngModel)]="isShowingLogo"
+            >Mostrar Logo</mat-checkbox
+          >
+          <mat-checkbox class="example-margin" [(ngModel)]="isShowingFoto"
+            >Foto</mat-checkbox
+          >
+          <mat-checkbox
+            class="example-margin"
+            [(ngModel)]="isShowingFirmaRector"
+            >Firma rector</mat-checkbox
+          >
+          <mat-checkbox
+            class="example-margin"
+            [(ngModel)]="isShowingFirmaTitular"
+            >Firma titular</mat-checkbox
+          >
+        </div>
+      </section>
+    </div>
+    <div class="informe-body page-vertical">
+      <div class="header-informe">
+        <div class="header-informe__institution">
+          <div class="header-logo">
+            @if (isShowingLogo) {
+              <img
+                [src]="IMAGES_URL + '/' + year?.logo"
+                alt="Logo de institución"
+              />
+            }
+          </div>
+          <div class="header-info">
+            <div class="header-info__school-name">
+              {{ year?.nombre_colegio }} - {{ year?.abrev_colegio }}
+            </div>
+            <div
+              class="header-info__encabezado-certificado"
+              [innerHTML]="getSanitizedText(year?.encabezado_certificado || '')"
+            ></div>
+            <div class="header-info__certificado">
+              Informe de proceso pedagógico {{ year?.year }}
+            </div>
+          </div>
+          <div class="header-foto">
+            @if (isShowingFoto && alumno.foto_id) {
+              <img
+                [src]="getImage(alumno.foto_nombre, alumno.sexo)"
+                alt="Foto de perfil"
+              />
+            }
+          </div>
+        </div>
+        <div class="header-informe__student">
+          <div class="header-informe__grupo">
+            <div>
+              Grupo: <span class="bold">{{ grupo.nombre }}</span>
+            </div>
+            <div class="header-informe__titular">
+              Titular: {{ grupo.nombres_titular }}
+            </div>
+          </div>
+          <div class="header-informe__student-name">
+            {{ alumno.nombres }} {{ alumno.apellidos }}
+          </div>
+        </div>
+      </div>
+
+      <div class="content-informe">
+        <form [formGroup]="form">
+          @if (showingEditor) {
+            <div class="NgxEditor__Wrapper">
+              <ngx-editor-menu
+                [editor]="editor"
+                [toolbar]="toolbar"
+              ></ngx-editor-menu>
+              <ngx-editor
+                [editor]="editor"
+                [placeholder]="'Escriba aquí...'"
+                formControlName="editorContent"
+              ></ngx-editor>
+            </div>
+            <div class="buttons-edit-container hidden-print">
+              @if (savingText) {
+                <mat-spinner [diameter]="30"></mat-spinner>
+              } @else {
+                <button mat-raised-button (click)="cancel()">
+                  Cancelar o cerrar
+                </button>
+                <button mat-raised-button color="primary" (click)="save()">
+                  @if (savingText) {
+                    <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+                  } @else {
+                    Guardar
+                  }
+                </button>
+              }
+            </div>
+          }
+        </form>
+        <div class="button-container">
+          <div
+            class="sanitized-container"
+            [class.hidden-screen]="showingEditor"
+          >
+            <div [innerHTML]="getSanitizedText(editorContent.value)"></div>
+            <button
+              class="edit-button-sanitized hidden-print"
+              mat-raised-button
+              (click)="edit()"
+              color="primary"
+            >
+              Editar reporte
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-informe">
+        @if (year) {
+          <div class="firmas-container no-break-print">
+            <div class="firma-titular">
+              <div class="firma_img_container">
+                @if (isShowingFirmaTitular && grupo.abrev) {
+                  <img
+                    [src]="IMAGES_URL + '/' + grupo.firma_titular_nombre"
+                    alt="Firma titular"
+                  />
+                }
+              </div>
+              <div class="firma-nombre-persona">
+                {{ grupo.nombres_titular + " " + grupo.apellidos_titular }}
+              </div>
+              <div class="firma_titulo">Titular</div>
+            </div>
+            <div class="firma-rector">
+              <div class="firma_img_container">
+                @if (isShowingFirmaRector && year.rector_firma_id) {
+                  <img
+                    [src]="IMAGES_URL + '/' + year.rector_firma"
+                    alt="Firma rector"
+                  />
+                }
+              </div>
+              <div class="firma-nombre-persona">
+                {{ year.nombres_rector + " " + year.apellidos_rector }}
+              </div>
+              <div class="firma_titulo">
+                @if (year.titulo_rector) {
+                  {{ year.titulo_rector }}
+                } @else {
+                  @if (year.sexo_rector === "M") {
+                    Rector
+                  }
+                  @if (year.sexo_rector === "F") {
+                    Rectora
+                  }
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

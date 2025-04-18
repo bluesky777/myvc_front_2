@@ -1,43 +1,96 @@
-tr.example-detail-row {
+tr.detail-row {
   height: 0;
 }
 
-tr.example-element-row:not(.example-expanded-row):hover {
+tr.element-row:not(.expanded-row):hover {
   background: whitesmoke;
 }
 
-tr.example-element-row:not(.example-expanded-row):active {
+tr.element-row:not(.expanded-row):active {
   background: #efefef;
 }
 
-.example-element-row td {
+.element-row td {
   border-bottom-width: 0;
 }
 
-.example-element-detail {
+.expanded-row td {
+  font-weight: 500;
+}
+
+.expanded-row + .detail-row td {
+  padding-top: 20px;
+  box-shadow: 0 0 4px #ccc inset;
+}
+
+.element-detail {
   overflow: hidden;
   display: flex;
+  position: relative;
+  flex-direction: column;
+
+  .perfil-container,
+  .apoyo-ajustes-razonables,
+  .caracterizacion-estudiante,
+  .acta-de-acuerdo {
+    display: flex;
+    margin-bottom: 40px;
+    gap: 10px;
+
+    label {
+      width: 210px;
+      font-weight: 500;
+      display: flex;
+      flex-direction: column;
+
+      span:nth-child(even) {
+        font-weight: 100;
+      }
+    }
+  }
+
+  .apoyo-ajustes-razonables,
+  .caracterizacion-estudiante,
+  .acta-de-acuerdo {
+    :nth-child(2) {
+      flex: 2;
+    }
+  }
+
+  .perfil-container {
+    img {
+      width: 100px;
+      border: 1px solid #ccc;
+      min-height: 100px;
+    }
+  }
 }
 
-.example-element-diagram {
-  min-width: 80px;
-  border: 2px solid black;
-  padding: 8px;
-  font-weight: lighter;
-  margin: 8px 0;
-  height: 104px;
+app-informe-pedagogico {
+  margin-bottom: 50px;
 }
 
-.example-element-symbol {
-  font-weight: bold;
-  font-size: 40px;
-  line-height: normal;
+@media (max-width: 700px) {
+  .apoyo-ajustes-razonables,
+  .caracterizacion-estudiante,
+  .acta-de-acuerdo {
+    flex-direction: column;
+  }
 }
 
-.example-element-description {
-  padding: 16px;
-}
-
-.example-element-description-attribution {
-  opacity: 0.5;
+@media print {
+  .mat-elevation-z8 {
+    box-shadow: unset;
+    border: 0px solid #000;
+  }
+  app-informe-pedagogico {
+    margin-bottom: 0;
+  }
+  tr.element-row {
+    display: none;
+  }
+  .expanded-row + .detail-row td {
+    padding: 0;
+    box-shadow: unset;
+  }
 }

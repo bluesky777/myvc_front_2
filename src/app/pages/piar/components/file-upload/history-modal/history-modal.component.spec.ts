@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TablePiarComponent } from './table-piar.component';
+import { HistoryModalComponent } from './history-modal.component';
 
-describe('TablePiarComponent', () => {
-  let component: TablePiarComponent;
-  let fixture: ComponentFixture<TablePiarComponent>;
+describe('HistoryModalComponent', () => {
+  let component: HistoryModalComponent;
+  let fixture: ComponentFixture<HistoryModalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TablePiarComponent]
+      imports: [HistoryModalComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(TablePiarComponent);
+    fixture = TestBed.createComponent(HistoryModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

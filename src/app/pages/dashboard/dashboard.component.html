@@ -1,1 +1,41 @@
-<app-sidenav></app-sidenav>
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="drawer.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>My Virtual College</span>
+</mat-toolbar>
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer class="example-sidenav" mode="side" [opened]="opened">
+    <app-sidenav></app-sidenav>
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <div class="welcome-container">
+      @if (!authorizing && !authorized) {
+        <div style="margin-bottom: 20px">
+          Actualmente usted no tiene acceso.
+        </div>
+      }
+      @if (!authorizing && user) {
+        <router-outlet></router-outlet>
+      }
+      @if (authorizing) {
+        <div style="margin-bottom: 20px">Autenticando...</div>
+      }
+      @if (isDashboard()) {
+        <h1>Bienvenido a la Ruta de inclusión</h1>
+        @if (isProductNotActivated()) {
+          <p class="bold">
+            Para usar esta página su institución debe adquirir el producto. Por
+            favor contactarse con nosotros para mayor información.
+          </p>
+        }
+        <p>
+          En esta aplicación podrán trabajar todos juntos en estrategias y
+          compromisos que permitan que cada estudiante tenga las oportunidades
+          necesarias para tener un desarrollo inclusivo y armonioso.
+        </p>
+      }
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

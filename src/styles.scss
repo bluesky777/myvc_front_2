@@ -1,4 +1,58 @@
-/* You can add global styles to this file, and also import other style files */
+@import "ngx-toastr/toastr";
+@import "./app/core/styles/print-styles.scss";
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+.bold {
+  font-weight: 500;
+}
+.center {
+  text-align: center;
+}
+.page-vertical {
+  width: 22cm;
+  background-color: #fff;
+}
+ngx-editor {
+  overflow-y: scroll;
+  height: calc(100% - 40px);
+  display: block;
+}
+
+@media print {
+  .page-vertical {
+    width: 100%;
+  }
+  .header-informe {
+    page-break-inside: avoid;
+  }
+  tr[mat-header-row] {
+    display: none;
+  }
+  .hidden-print {
+    display: none !important;
+  }
+  .detail-row td {
+    border: 0;
+    display: block;
+    box-shadow: unset;
+    page-break-inside: auto;
+  }
+  .hidden-screen {
+    display: block;
+  }
+  .no-break-print {
+    page-break-inside: avoid;
+  }
+}
+@media screen {
+  .hidden-screen {
+    display: none;
+  }
+}

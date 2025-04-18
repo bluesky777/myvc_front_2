@@ -1,0 +1,21 @@
+.text-container {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  min-height: 130px;
+  position: relative;
+  background-color: #fff;
+
+  .frontdrop {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+}
+
+.button-container {
+  display: flex;
+  justify-content: right;
+}

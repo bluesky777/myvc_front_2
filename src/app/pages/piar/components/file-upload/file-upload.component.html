@@ -1,0 +1,58 @@
+<form [formGroup]="myForm" class="uploader-wrapper">
+  @if (documentName) {
+    <div class="document-url">
+      <a [href]="UPLOADS_URL + '/' + documentName" target="_blank">{{
+        documentNameAlone
+      }}</a>
+      @if (hasEditingPermissions()) {
+        @if (deletingFile) {
+          <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+        } @else {
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="removeFile()"
+            aria-label="Eliminar archivo"
+          >
+            <mat-icon>delete_forever</mat-icon>
+          </button>
+        }
+      }
+      <button
+        (click)="openDialogHistory()"
+        mat-icon-button
+        aria-label="Ver historial del documento"
+      >
+        <mat-icon color="primary">alarm</mat-icon>
+      </button>
+    </div>
+  } @else if (!hasEditingPermissions()) {
+    <div class="alert-not-file">(No se ha subido archivo aún)</div>
+  }
+
+  @if (hasEditingPermissions() && !documentName) {
+    <mat-form-field appearance="fill">
+      <mat-label>Arrastra aquí un archivo</mat-label>
+      <ngx-mat-dropzone>
+        <input type="file" fileInput formControlName="fileCtrl" />
+        @if (fileControl.value) {
+          <mat-chip-row (removed)="clear()">
+            {{ file.name }}
+            <button matChipRemove (click)="cancelFile()">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+        }
+      </ngx-mat-dropzone>
+      <mat-icon matSuffix color="primary">cloud_upload</mat-icon>
+      <mat-error>Tipo de archivo inválido</mat-error>
+    </mat-form-field>
+    @if (savingFile) {
+      <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+    } @else if (!fileControl.invalid) {
+      <button mat-raised-button (click)="uploadFile()" color="primary">
+        Guardar
+      </button>
+    }
+  }
+</form>

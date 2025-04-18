@@ -1,15 +1,38 @@
 <section>
-  <mat-button-toggle-group
-    [(value)]="selectedGroup"
-    appearance="legacy"
-    name="fontStyle"
-    aria-label="Font Style"
-  >
-    @for (group of groups; track group.id) {
-      <mat-button-toggle (change)="onGroupClick()" value="{{ group.id }}">{{
-        group.abrev
-      }}</mat-button-toggle>
-    }
-  </mat-button-toggle-group>
-  <app-table-piar></app-table-piar>
+  <div class="content-header" [class.hidden-print]="selectedGroup">
+    <mat-button-toggle-group
+      [(value)]="selectedGroup"
+      name="groupButtons"
+      aria-label="Grupo"
+    >
+      @for (group of groups; track group.id) {
+        <mat-button-toggle
+          (change)="onGroupClick()"
+          [value]="group"
+          style="line-height: 20px"
+          >{{ group.abrev }}</mat-button-toggle
+        >
+      }
+    </mat-button-toggle-group>
+  </div>
+  @if (selectedGroup) {
+    <div class="info_titular">
+      <span class="bold">Titular:</span>
+      {{ selectedGroup.nombres_titular }}
+      {{ selectedGroup.apellidos_titular }}
+    </div>
+    <app-contexto-grupo
+      [loading]="loadingGroupData"
+      [record]="familiarContext"
+      [titular_id]="selectedGroup.titular_id"
+      [savingContext]="savingGroupContext"
+      (saveContext)="onSaveGroupContext($event)"
+    />
+  }
+  @if (alumnos.length > 0 && !loadingGroupData && selectedGroup) {
+    <app-table-piar
+      [alumnos]="alumnos"
+      [selectedGroup]="selectedGroup"
+    ></app-table-piar>
+  }
 </section>
