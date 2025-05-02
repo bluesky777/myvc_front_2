@@ -179,13 +179,17 @@ export class FileUploadComponent {
   }
 
   hasEditingPermissions(): boolean {
+    const isAdmin = !!(this.profileService.user?.tipo === 'Usuario');
+
     if (this.documentField === 'documento2') {
-      return !!(
+      const isTitular = !!(
         this.profileService.user?.tipo === 'Profesor' &&
-        this.titular_id === this.profileService.user?.persona_id
-      );
+        this.titular_id === this.profileService.user?.persona_id);
+      
+
+      return isTitular || isAdmin;
     } else {
-      return !!(this.profileService.user?.tipo === 'Usuario');
+      return isAdmin;
     }
   }
 
