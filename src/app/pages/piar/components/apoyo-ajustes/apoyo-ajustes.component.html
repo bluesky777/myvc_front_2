@@ -29,7 +29,7 @@
       </mat-button-toggle-group>
     </div>
 
-    @if (selectedAsignatura) {
+    @if (selectedAsignatura && !loadingAsignaturas) {
       <div class="field-row">
         <label>Apoyos y/o ajustes razonables</label>
         <app-dynamic-textarea

@@ -32,6 +32,8 @@ export class ApoyoAjustesComponent {
 
   loading = true;
 
+  loadingAsignaturas = false;
+
   constructor(
     private asignaturasService: AsignaturasService,
     private profileService: ProfileService,
@@ -50,7 +52,12 @@ export class ApoyoAjustesComponent {
       });
   }
 
-  onAsignaturaClick() {}
+  onAsignaturaClick() {
+    this.loadingAsignaturas = true;
+    setTimeout(() => {
+      this.loadingAsignaturas = false;
+    }, 500);
+  }
 
   hasDocenteOrAdminPermissions(docente_asignatura_id: number) {
     return !!(
