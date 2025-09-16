@@ -14,6 +14,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ActasDeAcuerdoComponent } from "../piar/components/actas-de-acuerdo/actas-de-acuerdo.component";
 
 @Component({
   selector: 'app-dashboard',
@@ -29,7 +30,8 @@ import { CommonModule } from '@angular/common';
     MatToolbarModule,
     RouterModule,
     SidenavComponent,
-  ],
+    ActasDeAcuerdoComponent,
+],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })

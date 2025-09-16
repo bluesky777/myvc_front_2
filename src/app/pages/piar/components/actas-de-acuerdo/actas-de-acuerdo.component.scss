@@ -1,0 +1,41 @@
+.background {
+  background-color: rgb(204 242 226);
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 5px #ccc inset;
+}
+
+.title {
+  text-align: center;
+  font-size: 16px;
+}
+.bold {
+  font-weight: bold;
+}
+.italic {
+  font-style: italic;
+  font-size: 13px;
+}
+.acta-container-extracted {
+  display: flex;
+  flex-direction: row;
+}
+section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+label {
+  width: 210px;
+  font-weight: 500;
+}
+app-file-upload {
+  flex: 1;
+}
+.acta-container {
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 0 5px #ccc;
+  border-radius: 8px;
+  display: flex;
+}

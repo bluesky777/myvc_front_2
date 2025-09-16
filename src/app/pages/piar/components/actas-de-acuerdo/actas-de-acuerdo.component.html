@@ -1,0 +1,36 @@
+<div class="background">
+  <div class="title">
+    <div class="bold">Acta de acuerdo</div>
+    <div class="italic">(modificado por el titular)</div>
+  </div>
+
+  <section class="acta-container-extracted">
+    @for (item of matriculas; track $index) {
+      <div>
+        @if (!item.showDocument) {
+          <span>
+            <a href="#" (click)="toggleDocument($event, item)">Acta {{ item.year }}</a>
+          </span> 
+        }
+      </div>
+    }
+  </section>
+
+  <section>
+    @for (item of matriculas; track $index) {
+      @if (item.showDocument) {
+        <div class="acta-container">
+            <label for="acta-{{ item.year }}">Acta {{ item.year }}</label>
+            <app-file-upload
+              [alumnoId]="123"
+              [documentName]="item.acta.documento"
+              [titular_id]="123"
+              [history]="'item.studentPiar.history'"
+              (updatedFile)="handleUpdatedFile(item, $event)"
+              documentField="archivo"
+            ></app-file-upload>
+        </div>
+      }
+    }
+  </section>
+</div>

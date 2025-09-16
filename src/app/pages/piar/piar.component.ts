@@ -31,7 +31,7 @@ import { InformePedagogicoComponent } from './components/informe-pedagogico/info
     MatButtonToggleModule,
     TablePiarComponent,
     ToastrModule,
-  ],
+],
   templateUrl: './piar.component.html',
   styleUrl: './piar.component.scss',
 })

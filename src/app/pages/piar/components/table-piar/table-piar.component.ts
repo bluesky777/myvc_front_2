@@ -31,6 +31,7 @@ import {
 import { InformePedagogicoComponent } from '../informe-pedagogico/informe-pedagogico.component';
 import { PerfilContainerComponent } from '../perfil-container/perfil-container.component';
 import { AsignaturasService } from './../../../../features/asignaturas/asignaturas.services';
+import { ActasDeAcuerdoComponent } from "../actas-de-acuerdo/actas-de-acuerdo.component";
 
 @UntilDestroy()
 @Component({
@@ -46,7 +47,8 @@ import { AsignaturasService } from './../../../../features/asignaturas/asignatur
     PerfilContainerComponent,
     ApoyoAjustesComponent,
     InformePedagogicoComponent,
-  ],
+    ActasDeAcuerdoComponent,
+],
   templateUrl: './table-piar.component.html',
   styleUrl: './table-piar.component.scss',
   animations: [

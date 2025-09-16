@@ -112,8 +112,8 @@
 
         <div class="acta-de-acuerdo hidden-print">
           <label style="padding-top: 15px">
-            <span>Acta de acuerdo</span>
-            <span>(modificado por el titular)</span>
+            <span>Deprecado - Acta de acuerdo</span>
+            <span>(No usar más)</span>
           </label>
           @if (!isChangingFile) {
             <app-file-upload
@@ -126,6 +126,12 @@
             ></app-file-upload>
           }
         </div>
+
+        <app-acta-de-acuerdo
+          class="hidden-print"
+          [matriculas]="element.studentPiar.matriculas"
+        ></app-acta-de-acuerdo>
+
         <app-informe-pedagogico
           [alumno]="element"
           [grupo]="selectedGroup"

@@ -77,7 +77,6 @@ export class FileUploadComponent {
   deletingFile = false;
 
   constructor(
-    private http: HttpClient,
     private toastr: ToastrService,
     private fileUploadService: FileUploadService,
     private fb: FormBuilder,
