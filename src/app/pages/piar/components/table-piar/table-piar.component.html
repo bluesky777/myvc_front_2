@@ -110,26 +110,30 @@
           [selectedGroup]="selectedGroup"
         ></app-apoyo-ajustes>
 
-        <div class="acta-de-acuerdo hidden-print">
-          <label style="padding-top: 15px">
-            <span>Deprecado - Acta de acuerdo</span>
-            <span>(No usar más)</span>
-          </label>
-          @if (!isChangingFile) {
-            <app-file-upload
-              [alumnoId]="element.studentPiar.alumno_id"
-              [documentName]="element.studentPiar.documento2"
-              [titular_id]="selectedGroup.titular_id"
-              [history]="element.studentPiar.history"
-              (updatedFile)="handleUpdatedFile(element, $event)"
-              documentField="documento2"
-            ></app-file-upload>
-          }
-        </div>
+        @if (element.studentPiar.documento2 !== null) {
+          <div class="acta-de-acuerdo hidden-print">
+            <label style="padding-top: 15px">
+              <span>Deprecado - Acta de acuerdo</span>
+              <span>(No usar más)</span>
+            </label>
+            @if (!isChangingFile) {
+              <app-file-upload
+                [alumnoId]="element.studentPiar.alumno_id"
+                [documentName]="element.studentPiar.documento2"
+                [titular_id]="selectedGroup.titular_id"
+                [history]="element.studentPiar.history"
+                (updatedFile)="handleUpdatedFile(element, $event)"
+                documentField="documento2"
+              ></app-file-upload>
+            }
+          </div>
+        }
 
         <app-acta-de-acuerdo
           class="hidden-print"
+          [alumnoId]="element.studentPiar.alumno_id"
           [matriculas]="element.studentPiar.matriculas"
+          [titular_id]="selectedGroup.titular_id"
         ></app-acta-de-acuerdo>
 
         <app-informe-pedagogico

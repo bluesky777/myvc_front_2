@@ -22,12 +22,14 @@
         <div class="acta-container">
             <label for="acta-{{ item.year }}">Acta {{ item.year }}</label>
             <app-file-upload
-              [alumnoId]="123"
+              [alumnoId]="alumnoId"
               [documentName]="item.acta.documento"
-              [titular_id]="123"
-              [history]="'item.studentPiar.history'"
+              [titular_id]="titular_id"
+              [yearId]="item.year_id"
+              [history]="item.acta.history"
               (updatedFile)="handleUpdatedFile(item, $event)"
-              documentField="archivo"
+              (handleUpload)="handleUpload($event, item)"
+              documentField="actaAcuerdo"
             ></app-file-upload>
         </div>
       }

@@ -22,10 +22,17 @@ import { ProfileService } from '../../../../core/services/profile.service';
 import { FileUploadService } from './services/file-upload.service';
 import { HistoryModalComponent } from './history-modal/history-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ActaAcuerdoService } from '../actas-de-acuerdo/services/acta-acuerdo.service';
 
 export type UploadedDocument = {
   documentField: string;
   fileName: string;
+};
+
+export type DocumentToLoad = {
+  documentField: string;
+  file: File;
+  alumnoId: number;
 };
 
 @Component({
@@ -57,7 +64,11 @@ export class FileUploadComponent {
 
   @Input() titular_id!: number;
 
+  @Input() yearId?: number;
+
   @Output() updatedFile = new EventEmitter<UploadedDocument>();
+
+  @Output() handleUpload = new EventEmitter<DocumentToLoad>();
 
   validators = [
     FileInputValidators.accept('application/pdf'),
@@ -82,6 +93,7 @@ export class FileUploadComponent {
     private fb: FormBuilder,
     public profileService: ProfileService,
     public dialog: MatDialog,
+    private actaAcuerdoService: ActaAcuerdoService,
   ) {
     this.myForm = this.fb.group({
       fileCtrl: [
@@ -104,13 +116,29 @@ export class FileUploadComponent {
   }
 
   uploadFile() {
+    if (!this.fileControl.value) return;
+
+    const file = this.fileControl.value as File;
+    const data = {
+      documentField: this.documentField,
+      file,
+      alumnoId: this.alumnoId,
+    } as DocumentToLoad
+
+    if (this.handleUpload) {
+      this.handleUpload.emit(data);
+      return;
+    }
+
     if (this.savingFile) return;
 
     this.savingFile = true;
 
-    if (!this.fileControl.value) return;
+    this.defaultHandleUpload(data)
 
-    const file = this.fileControl.value as File;
+  }
+
+  defaultHandleUpload({ file }: DocumentToLoad) {
 
     const MAX_SIZE = 5000000; // 5MB
     if (file && file.size > MAX_SIZE) {
@@ -130,6 +158,10 @@ export class FileUploadComponent {
               fileName: file.name,
             } as UploadedDocument);
           }
+          if (res.status === 'UploadStatus.ERROR') {
+            this.savingFile = false;
+            this.toastr.warning('Error guardando archivo');
+          }
         },
         error: () => {
           this.savingFile = false;
@@ -141,8 +173,15 @@ export class FileUploadComponent {
   public removeFile(): void {
     this.deletingFile = true;
 
-    this.fileUploadService
-      .deleteFile(this.alumnoId, this.documentField)
+    let uploadObservable;
+
+    if (this.yearId && this.documentField === 'actaAcuerdo') {
+      uploadObservable = this.actaAcuerdoService.deleteFile(this.alumnoId, this.yearId);
+    } else {
+      uploadObservable = this.fileUploadService.deleteFile(this.alumnoId, this.documentField as string);
+    }
+
+    uploadObservable
       .subscribe({
         next: () => {
           this.documentName = undefined;
@@ -180,11 +219,10 @@ export class FileUploadComponent {
   hasEditingPermissions(): boolean {
     const isAdmin = !!(this.profileService.user?.tipo === 'Usuario');
 
-    if (this.documentField === 'documento2') {
+    if (this.documentField === 'documento2' || this.documentField === 'actaAcuerdo') {
       const isTitular = !!(
         this.profileService.user?.tipo === 'Profesor' &&
         this.titular_id === this.profileService.user?.persona_id);
-      
 
       return isTitular || isAdmin;
     } else {
