@@ -125,7 +125,7 @@ export class FileUploadComponent {
       alumnoId: this.alumnoId,
     } as DocumentToLoad
 
-    if (this.handleUpload) {
+    if (this.handleUpload.observed) {
       this.handleUpload.emit(data);
       return;
     }
