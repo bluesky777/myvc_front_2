@@ -20,6 +20,7 @@ import { MatButton } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Editor, NgxEditorModule, toHTML } from 'ngx-editor';
 import { toolbarDefaultOptions } from '../../../../shared/config/toolbar-options';
+import { RichTextService } from '../../../../core/services/rich-text.service';
 import { GroupContext } from './models/familiar-grupo';
 
 @Component({
@@ -55,7 +56,10 @@ export class ContextoGrupoComponent implements OnInit, OnDestroy, OnChanges {
 
   hasEditingPermissions = false;
 
-  constructor(private profileService: ProfileService) {}
+  constructor(
+    private profileService: ProfileService,
+    private richText: RichTextService,
+  ) {}
 
   ngOnInit(): void {
     this.editor = new Editor();
@@ -123,7 +127,7 @@ export class ContextoGrupoComponent implements OnInit, OnDestroy, OnChanges {
         : toHTML(this.doc.value);
     this.saveContext.emit({
       ...this.contextoGrupoRecord,
-      caracterizacion_grupo: html,
+      caracterizacion_grupo: this.richText.clean(html),
     } as GroupContext);
   }
 }

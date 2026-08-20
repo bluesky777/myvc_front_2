@@ -10,7 +10,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { DomSanitizer } from '@angular/platform-browser';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Editor, NgxEditorModule, toHTML } from 'ngx-editor';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
@@ -22,6 +21,7 @@ import {
 } from '../../../../core/models/piar-config';
 import { Sexo } from '../../../../core/models/profile';
 import { ProfileService } from '../../../../core/services/profile.service';
+import { RichTextService } from '../../../../core/services/rich-text.service';
 import { toolbarDefaultOptions } from '../../../../shared/config/toolbar-options';
 import { Group } from '../../../groups/models/groups';
 import { Student } from '../../../groups/models/student';
@@ -81,7 +81,7 @@ export class InformePedagogicoComponent implements OnInit {
   constructor(
     private profileService: ProfileService,
     private yearsService: YearsService,
-    private sanitizer: DomSanitizer,
+    private richText: RichTextService,
     private studentContextService: StudentContextService,
     private toastr: ToastrService,
   ) {}
@@ -127,7 +127,7 @@ export class InformePedagogicoComponent implements OnInit {
   }
 
   getSanitizedText(text: string) {
-    return this.sanitizer.bypassSecurityTrustHtml(text);
+    return this.richText.sanitize(text);
   }
 
   cancel() {
@@ -151,7 +151,7 @@ export class InformePedagogicoComponent implements OnInit {
 
     const data = {
       id: this.alumno.studentPiar?.id,
-      text: html,
+      text: this.richText.clean(html),
       field: 'reporte',
     } as DynamicTextareaObject;
 

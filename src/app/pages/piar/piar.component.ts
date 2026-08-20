@@ -117,20 +117,17 @@ export class PiarComponent implements OnInit {
   }
 
   onSaveGroupContext(familiarContext: GroupContext) {
-    if (!this.selectedGroup) return;
+    // `putContextoDeGrupo` solo usa `id` y `caracterizacion_grupo`, y es un
+    // UPDATE: sin `id` no afecta a ninguna fila y el usuario vería un
+    // "guardado" que no guardó nada. La fila la crea el GET del grupo.
+    if (!familiarContext.id) {
+      this.toastr.error('No se pudo guardar: falta el contexto del grupo');
+      return;
+    }
 
     this.savingGroupContext = true;
 
-    // Un grupo puede no tener aún fila de contexto: en ese caso el registro
-    // llega sin identificadores y hay que tomarlos del grupo seleccionado.
-    const payload: GroupContext = {
-      ...familiarContext,
-      grupo_id: familiarContext.grupo_id ?? this.selectedGroup.id,
-      titular_id: familiarContext.titular_id ?? this.selectedGroup.titular_id,
-      year_id: familiarContext.year_id ?? this.selectedGroup.year_id,
-    };
-
-    this.familiarContextService.saveGroupContext(payload).subscribe({
+    this.familiarContextService.saveGroupContext(familiarContext).subscribe({
       next: (res: ApiResponse<GroupContext>) => {
         this.savingGroupContext = false;
         this.toastr.success('Contexto familiar guardado');

@@ -15,11 +15,11 @@ import {
 } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { DomSanitizer } from '@angular/platform-browser';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Editor, NgxEditorModule } from 'ngx-editor';
 import { ToastrService } from 'ngx-toastr';
 import { ProfileService } from '../../../../core/services/profile.service';
+import { RichTextService } from '../../../../core/services/rich-text.service';
 import { toolbarDefaultOptions } from '../../../../shared/config/toolbar-options';
 import { StudentContextService } from '../table-piar/services/student-context.service';
 import { DynamicTextareaObject } from './models/dynamic-textarea-object';
@@ -67,7 +67,7 @@ export class DynamicTextareaComponent implements OnInit, OnDestroy {
     private studentContextService: StudentContextService,
     private asignaturaContextService: AsignaturaContextService,
     private toastr: ToastrService,
-    private sanitizer: DomSanitizer,
+    private richText: RichTextService,
     private profileService: ProfileService,
   ) {}
 
@@ -97,7 +97,7 @@ export class DynamicTextareaComponent implements OnInit, OnDestroy {
 
     const data = {
       id: this.dataId,
-      text: this.doc.value,
+      text: this.richText.clean(this.doc.value),
       field: this.dataField,
     } as DynamicTextareaObject;
 
@@ -146,6 +146,6 @@ export class DynamicTextareaComponent implements OnInit, OnDestroy {
   }
 
   getSanitizedText() {
-    return this.sanitizer.bypassSecurityTrustHtml(this.dataText || '');
+    return this.richText.sanitize(this.dataText);
   }
 }
