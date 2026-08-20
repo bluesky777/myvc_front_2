@@ -65,12 +65,11 @@ export class ActasDeAcuerdoComponent implements OnInit {
             // Sin esto la vista sigue mostrando el dropzone en vez del enlace
             // hasta recargar: la subida delegada no emite `updatedFile`.
             //
-            // TODO: el nombre real lo decide el backend —guarda en
+            // El nombre real lo decide el backend —guarda en
             // `user_<user_id>/<nombre>` y resuelve colisiones con `(1)`,
-            // `(2)`…— pero `POST piars-actas-acuerdo/document` devuelve el
-            // número de filas afectadas, no la ruta. Hasta que la devuelva, el
-            // enlace no resuelve hasta recargar. Mismo caso que `documento1`.
-            matricula.acta.documento = file.name;
+            // `(2)`…, y la carpeta es por usuario, no por alumno—, así que no
+            // se puede deducir aquí: viene en `documento`.
+            matricula.acta.documento = res.body?.documento ?? file.name;
             matricula.showDocument = true;
             this.toastr.success('Acta guardada.');
           }

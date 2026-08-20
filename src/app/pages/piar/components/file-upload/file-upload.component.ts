@@ -167,7 +167,10 @@ export class FileUploadComponent {
             this.toastr.success('Archivo guardado');
             this.updatedFile.emit({
               documentField: this.documentField,
-              fileName: file.name,
+              // El backend guarda en `user_<user_id>/<nombre>` y resuelve
+              // colisiones con `(1)`, `(2)`…, así que `file.name` no sirve
+              // para construir el enlace; `documento` trae la ruta real.
+              fileName: res.body?.documento ?? file.name,
             } as UploadedDocument);
           }
           if (res.status === 'UploadStatus.ERROR') {
@@ -209,7 +212,7 @@ export class FileUploadComponent {
           this.deletingFile = false;
         },
         error: () => {
-          this.toastr.error('Lo sentimos, no se pudo subir el archivo.');
+          this.toastr.error('Lo sentimos, no se pudo eliminar el archivo.');
           this.deletingFile = false;
           this.savingFile = false;
         },
