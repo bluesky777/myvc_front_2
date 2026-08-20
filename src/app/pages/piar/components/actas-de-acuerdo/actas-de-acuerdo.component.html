@@ -5,7 +5,7 @@
   </div>
 
   <section class="acta-container-extracted">
-    @for (item of matriculas; track $index) {
+    @for (item of actas; track $index) {
       <div>
         @if (!item.showDocument) {
           <span>
@@ -17,7 +17,7 @@
   </section>
 
   <section>
-    @for (item of matriculas; track $index) {
+    @for (item of actas; track $index) {
       @if (item.showDocument) {
         <div class="acta-container">
             <label for="acta-{{ item.year }}">Acta {{ item.year }}</label>
@@ -27,6 +27,7 @@
               [titular_id]="titular_id"
               [yearId]="item.year_id"
               [history]="item.acta.history"
+              [saving]="savingYearId === item.year_id"
               (updatedFile)="handleUpdatedFile(item, $event)"
               (handleUpload)="handleUpload($event, item)"
               documentField="actaAcuerdo"

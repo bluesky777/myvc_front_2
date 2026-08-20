@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { DocumentToLoad, FileUploadComponent, UploadedDocument } from '../file-upload/file-upload.component';
-import { Matricula } from '../../../groups/models/acta-acuerdo';
+import { ActaAcuerdo, Matricula } from '../../../groups/models/acta-acuerdo';
 import { ToastrService } from 'ngx-toastr';
 import { ActaAcuerdoService } from './services/acta-acuerdo.service';
 import { ProfileService } from '../../../../core/services/profile.service';
@@ -14,20 +14,17 @@ import { ProfileService } from '../../../../core/services/profile.service';
   templateUrl: './actas-de-acuerdo.component.html',
   styleUrl: './actas-de-acuerdo.component.scss'
 })
-export class ActasDeAcuerdoComponent {
+export class ActasDeAcuerdoComponent implements OnInit {
   @Input() matriculas!: Matricula[];
 
   @Input() alumnoId!: number;
 
   @Input() titular_id!: number;
 
-  showDocument = false;
+  /** `year_id` del acta que se está subiendo, o null si no hay ninguna. */
+  savingYearId: number | null = null;
 
-  isChangingFile = false;
-
-  savingFile = false;
-
-  deletingFile = false;
+  actas: Matricula[] = [];
 
   constructor(
     private toastr: ToastrService,
@@ -36,13 +33,13 @@ export class ActasDeAcuerdoComponent {
   ) {}
 
   ngOnInit(): void {
-    this.setShowDocument(false);
-  }
-
-  setShowDocument(value: boolean) {
-    this.matriculas.forEach((matricula) => {
-      matricula.showDocument = !!matricula.acta.documento;
-    });
+    // El backend puede no enviar `matriculas`, o enviar una matrícula sin
+    // `acta`; se normaliza aquí para que la plantilla no tenga que defenderse.
+    this.actas = (this.matriculas ?? []).map((matricula) => ({
+      ...matricula,
+      acta: matricula.acta ?? ({} as ActaAcuerdo),
+      showDocument: !!matricula.acta?.documento,
+    }));
   }
 
   toggleDocument($event: any, acta: any) {
@@ -51,41 +48,33 @@ export class ActasDeAcuerdoComponent {
   }
 
   handleUpdatedFile(matricula: Matricula, $event: UploadedDocument) {
-    this.isChangingFile = true;
-    if ($event.documentField === 'documento1') {
-      matricula.acta.documento = $event.fileName;
-    } else {
-      matricula.acta.documento = $event.fileName;
-    }
-    setTimeout(() => (this.isChangingFile = false), 200);
+    matricula.acta.documento = $event.fileName;
   }
 
   handleUpload({ file, alumnoId, documentField }: DocumentToLoad, matricula: Matricula) {
-    if (this.savingFile) return;
+    if (this.savingYearId !== null) return;
 
-    this.savingFile = true;
-
-    const MAX_SIZE = 5000000; // 5MB
-    if (file && file.size > MAX_SIZE) {
-      this.toastr.success('Tamaño invalido');
-      return;
-    }
+    this.savingYearId = matricula.year_id;
 
     this.actaAcuerdoService
       .updateFile(file, alumnoId, documentField, matricula.year_id)
       .subscribe({
         next: (res) => {
           if (res.status === 'UploadStatus.UPLOADED') {
-            this.savingFile = false;
+            this.savingYearId = null;
+            // Sin esto la vista sigue mostrando el dropzone en vez del enlace
+            // hasta recargar: la subida delegada no emite `updatedFile`.
+            matricula.acta.documento = file.name;
+            matricula.showDocument = true;
             this.toastr.success('Acta guardada.');
           }
           if (res.status === 'UploadStatus.ERROR') {
-            this.savingFile = false;
+            this.savingYearId = null;
             this.toastr.warning('Error guardando archivo');
           }
         },
         error: () => {
-          this.savingFile = false;
+          this.savingYearId = null;
           this.toastr.warning('Error guardando archivo');
         },
       });

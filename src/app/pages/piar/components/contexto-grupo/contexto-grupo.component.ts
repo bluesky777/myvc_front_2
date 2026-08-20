@@ -59,7 +59,6 @@ export class ContextoGrupoComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit(): void {
     this.editor = new Editor();
-    const user = this.profileService.user;
     this.setHasEditingPermissions();
     this.createForm();
   }
@@ -68,12 +67,32 @@ export class ContextoGrupoComponent implements OnInit, OnDestroy, OnChanges {
     this.editor.destroy();
   }
 
+  /**
+   * El componente no se recrea al cambiar de grupo (el `@if` del padre sigue
+   * siendo verdadero), así que hay que recalcular permisos y contenido aquí.
+   * En el primer ciclo `form` aún no existe: lo construye `ngOnInit`.
+   */
   ngOnChanges(changes: SimpleChanges): void {
-    const groupContext = changes['contextoGrupoRecord']?.currentValue;
-    if (groupContext && this.form) {
+    if (changes['titular_id']) {
+      this.setHasEditingPermissions();
+      this.applyEditingPermissions();
+    }
+
+    if (changes['contextoGrupoRecord'] && this.form) {
       this.form
         .get('editorContent')
-        ?.setValue(groupContext.caracterizacion_grupo);
+        ?.setValue(this.contextoGrupoRecord?.caracterizacion_grupo ?? '');
+    }
+  }
+
+  private applyEditingPermissions(): void {
+    const control = this.form?.get('editorContent');
+    if (!control) return;
+
+    if (this.hasEditingPermissions) {
+      control.enable({ emitEvent: false });
+    } else {
+      control.disable({ emitEvent: false });
     }
   }
 

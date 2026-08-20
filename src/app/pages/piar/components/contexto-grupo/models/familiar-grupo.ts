@@ -1,3 +1,4 @@
+import { Matricula } from '../../../../groups/models/acta-acuerdo';
 import { Group } from '../../../../groups/models/groups';
 import { Student } from '../../../../groups/models/student';
 
@@ -21,6 +22,8 @@ export interface StudentPiar {
   documento1?: string;
   documento2?: string;
   reporte: null | string;
+  /** Puede no venir en el payload; ver ActasDeAcuerdoComponent. */
+  matriculas?: Matricula[];
   history?: any;
   created_at: string;
   updated_at: string;

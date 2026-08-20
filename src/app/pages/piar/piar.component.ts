@@ -78,11 +78,16 @@ export class PiarComponent implements OnInit {
   onGroupClick() {
     if (this.selectedGroup) {
       this.loadingGroupData = true;
+      // Sin esto, si la carga falla se siguen mostrando los alumnos y el
+      // contexto del grupo anterior bajo el encabezado del grupo nuevo.
+      this.familiarContext = undefined;
+      this.alumnos = [];
+
       this.familiarContextService
         .getFamiliarContext(this.selectedGroup.id)
         .subscribe({
           next: (res: ApiResponse<GroupContextStudents>) => {
-            this.familiarContext = res.data.familiarContext[0];
+            this.familiarContext = res.data.familiarContext?.[0];
 
             if (this.selectedGroup) {
               this.selectedGroup.firma_titular_nombre =
@@ -104,15 +109,28 @@ export class PiarComponent implements OnInit {
           },
           error: (err) => {
             this.loadingGroupData = false;
-            console.log(err);
+            console.error('Error cargando el contexto del grupo', err);
+            this.toastr.error('Error cargando los datos del grupo');
           },
         });
     }
   }
 
   onSaveGroupContext(familiarContext: GroupContext) {
+    if (!this.selectedGroup) return;
+
     this.savingGroupContext = true;
-    this.familiarContextService.saveGroupContext(familiarContext).subscribe({
+
+    // Un grupo puede no tener aún fila de contexto: en ese caso el registro
+    // llega sin identificadores y hay que tomarlos del grupo seleccionado.
+    const payload: GroupContext = {
+      ...familiarContext,
+      grupo_id: familiarContext.grupo_id ?? this.selectedGroup.id,
+      titular_id: familiarContext.titular_id ?? this.selectedGroup.titular_id,
+      year_id: familiarContext.year_id ?? this.selectedGroup.year_id,
+    };
+
+    this.familiarContextService.saveGroupContext(payload).subscribe({
       next: (res: ApiResponse<GroupContext>) => {
         this.savingGroupContext = false;
         this.toastr.success('Contexto familiar guardado');
