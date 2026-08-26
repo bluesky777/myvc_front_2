@@ -78,11 +78,16 @@ export class PiarComponent implements OnInit {
   onGroupClick() {
     if (this.selectedGroup) {
       this.loadingGroupData = true;
+      // Sin esto, si la carga falla se siguen mostrando los alumnos y el
+      // contexto del grupo anterior bajo el encabezado del grupo nuevo.
+      this.familiarContext = undefined;
+      this.alumnos = [];
+
       this.familiarContextService
         .getFamiliarContext(this.selectedGroup.id)
         .subscribe({
           next: (res: ApiResponse<GroupContextStudents>) => {
-            this.familiarContext = res.data.familiarContext[0];
+            this.familiarContext = res.data.familiarContext?.[0];
 
             if (this.selectedGroup) {
               this.selectedGroup.firma_titular_nombre =
@@ -104,14 +109,24 @@ export class PiarComponent implements OnInit {
           },
           error: (err) => {
             this.loadingGroupData = false;
-            console.log(err);
+            console.error('Error cargando el contexto del grupo', err);
+            this.toastr.error('Error cargando los datos del grupo');
           },
         });
     }
   }
 
   onSaveGroupContext(familiarContext: GroupContext) {
+    // `putContextoDeGrupo` solo usa `id` y `caracterizacion_grupo`, y es un
+    // UPDATE: sin `id` no afecta a ninguna fila y el usuario vería un
+    // "guardado" que no guardó nada. La fila la crea el GET del grupo.
+    if (!familiarContext.id) {
+      this.toastr.error('No se pudo guardar: falta el contexto del grupo');
+      return;
+    }
+
     this.savingGroupContext = true;
+
     this.familiarContextService.saveGroupContext(familiarContext).subscribe({
       next: (res: ApiResponse<GroupContext>) => {
         this.savingGroupContext = false;

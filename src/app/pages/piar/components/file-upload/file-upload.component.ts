@@ -6,6 +6,7 @@ import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
@@ -14,7 +15,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DropzoneCdkModule, FileInputValidators } from '@ngx-dropzone/cdk';
 import { DropzoneMaterialModule } from '@ngx-dropzone/material';
-import { Validators } from 'ngx-editor';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
 import { UPLOADS_URL } from '../../../../core/CONSTANTS_URL';
@@ -34,6 +34,8 @@ export type DocumentToLoad = {
   file: File;
   alumnoId: number;
 };
+
+export const MAX_FILE_SIZE = 5000000; // 5MB
 
 @Component({
   selector: 'app-file-upload',
@@ -66,6 +68,12 @@ export class FileUploadComponent {
 
   @Input() yearId?: number;
 
+  /**
+   * Permite que el padre muestre el spinner cuando es él quien realiza la
+   * subida (ver `handleUpload`), porque en ese caso `savingFile` no se usa.
+   */
+  @Input() saving = false;
+
   @Output() updatedFile = new EventEmitter<UploadedDocument>();
 
   @Output() handleUpload = new EventEmitter<DocumentToLoad>();
@@ -80,8 +88,6 @@ export class FileUploadComponent {
   myForm: FormGroup;
 
   UPLOADS_URL = UPLOADS_URL;
-
-  documentNameAlone = '';
 
   savingFile = false;
 
@@ -103,12 +109,17 @@ export class FileUploadComponent {
     });
   }
 
-  ngOnInit(): void {
-    if (this.documentName && this.documentName.indexOf('/') > -1) {
-      this.documentNameAlone = this.documentName?.split('/')[1] || '';
-    } else {
-      this.documentNameAlone = this.documentName as string;
+  /**
+   * Getter (y no un campo calculado en `ngOnInit`) para que el nombre siga al
+   * `documentName` cuando el padre lo actualiza tras subir o borrar.
+   */
+  get documentNameAlone(): string {
+    if (!this.documentName) {
+      return '';
     }
+    return this.documentName.indexOf('/') > -1
+      ? this.documentName.split('/')[1] || ''
+      : this.documentName;
   }
 
   clear() {
@@ -119,6 +130,14 @@ export class FileUploadComponent {
     if (!this.fileControl.value) return;
 
     const file = this.fileControl.value as File;
+
+    // Se valida antes de levantar cualquier flag de carga, y aquí y no en
+    // `defaultHandleUpload` para cubrir también la subida delegada al padre.
+    if (file.size > MAX_FILE_SIZE) {
+      this.toastr.error('El archivo supera el tamaño máximo de 5MB.');
+      return;
+    }
+
     const data = {
       documentField: this.documentField,
       file,
@@ -139,13 +158,6 @@ export class FileUploadComponent {
   }
 
   defaultHandleUpload({ file }: DocumentToLoad) {
-
-    const MAX_SIZE = 5000000; // 5MB
-    if (file && file.size > MAX_SIZE) {
-      this.toastr.success('Tamaño invalido');
-      return;
-    }
-
     this.fileUploadService
       .updateFile(file, this.alumnoId, this.documentField)
       .subscribe({
@@ -155,7 +167,10 @@ export class FileUploadComponent {
             this.toastr.success('Archivo guardado');
             this.updatedFile.emit({
               documentField: this.documentField,
-              fileName: file.name,
+              // El backend guarda en `user_<user_id>/<nombre>` y resuelve
+              // colisiones con `(1)`, `(2)`…, así que `file.name` no sirve
+              // para construir el enlace; `documento` trae la ruta real.
+              fileName: res.body?.documento ?? file.name,
             } as UploadedDocument);
           }
           if (res.status === 'UploadStatus.ERROR') {
@@ -186,12 +201,18 @@ export class FileUploadComponent {
         next: () => {
           this.documentName = undefined;
           this.toastr.success('Archivo eliminado.');
+          // El padre es dueño del modelo: sin esto se queda con el nombre del
+          // archivo ya borrado y lo reaparece al recrearse el componente.
+          this.updatedFile.emit({
+            documentField: this.documentField,
+            fileName: '',
+          } as UploadedDocument);
           this.cancelFile();
           this.savingFile = false;
           this.deletingFile = false;
         },
         error: () => {
-          this.toastr.error('Lo sentimos, no se pudo subir el archivo.');
+          this.toastr.error('Lo sentimos, no se pudo eliminar el archivo.');
           this.deletingFile = false;
           this.savingFile = false;
         },

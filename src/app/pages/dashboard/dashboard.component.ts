@@ -54,29 +54,31 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.authorizing = true;
+
+    // Estas dos cargas son de configuración: si fallan no deben decidir el
+    // estado de autenticación, que lo resuelve únicamente el login de abajo.
     this.yearsService.getYears().subscribe({
-      next: (res) => {
-        // console.log(res);
-      },
-      error: () => {
-        this.authorizing = false;
-      },
+      error: (err) => console.error('Error cargando los years', err),
     });
 
     this.yearsService.getPiarConfig().subscribe({
-      next: (res) => {
-        // console.log(res);
-      },
+      error: (err) => console.error('Error cargando la config del PIAR', err),
     });
 
     this.profileService.getData().subscribe({
       next: (user: unknown) => {
-        if ((user as Array<any>).length === 0) {
+        // El backend responde un array vacío cuando el xtoken no es válido.
+        if (Array.isArray(user) && user.length === 0) {
           this.authorized = false;
         } else {
           this.user = user as Profile;
           this.authorized = true;
         }
+        this.authorizing = false;
+      },
+      error: (err) => {
+        console.error('Error autenticando', err);
+        this.authorized = false;
         this.authorizing = false;
       },
     });

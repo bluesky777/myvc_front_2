@@ -45,9 +45,11 @@
         }
       </ngx-mat-dropzone>
       <mat-icon matSuffix color="primary">cloud_upload</mat-icon>
-      <mat-error>Tipo de archivo inválido</mat-error>
+      @if (fileControl.hasError("invalidFileType")) {
+        <mat-error>Tipo de archivo inválido</mat-error>
+      }
     </mat-form-field>
-    @if (savingFile) {
+    @if (savingFile || saving) {
       <mat-spinner color="accent" [diameter]="20"></mat-spinner>
     } @else if (!fileControl.invalid) {
       <button mat-raised-button (click)="uploadFile()" color="primary">
